@@ -124,6 +124,8 @@ function queryConnection(
  */
 function upload(): array
 {
+    // Usually you would do a lot of error checking here for
+    // e.g sting length or file size/type etc.
     $errors = [];
     if ($_FILES['file']['error'] != 0) {
         $errors[] = ['Video upload failed.'];
@@ -176,6 +178,99 @@ function upload(): array
     return $errors;
 }
 
+/**
+ * For streaming a video from the database in chunks
+ *
+ * @param int $videoId id of the video to stream
+ *
+ * @return array<int, array<int, string>>
+ * @since  0.0.0
+ */
+function stream(int $videoId): array
+{
+    $errors = [];
+
+    $conn = openConnection();
+    $sql = <<<EOF
+        SELECT content, filesize
+        FROM videos WHERE
+        id=?
+        LIMIT 1
+    EOF;
+    $result = queryConnection(
+        $conn,
+        $sql,
+        [$videoId],
+        "i"
+    )->get_result();
+    if ($result) {
+        $row = $result->fetch_assoc();
+        if (isset($row['content'])) {
+            if (isset($row['filesize'])) {
+                $total_size = $row['filesize'];
+            } else {
+                $total_size = $row['content'];
+            }
+            header('Content-Type: video/mp4');
+            header('Content-Length: ' . $total_size);
+            $chunk_size = 1024 * 1024; // 1MB chunks
+            $bytes_sent = 0;
+            while ($bytes_sent < $total_size) {
+                $chunk = substr($row['content'], $bytes_sent, $chunk_size);
+                echo $chunk;
+                flush();
+                $bytes_sent += strlen($chunk);
+            }
+            $result->free_result();
+        } else {
+            $errors[] = ['Database table malformed.'];
+        }
+    } else {
+        $errors[] = ['Video cannot be found.'];
+    }
+    closeConnection($conn);
+    return $errors;
+}
+
+/**
+ * For returning video metadata
+ *
+ * Note: returns array<string, ...|string> because of $data['person']
+ *
+ * @return array<string, array<string>|string>
+ * @since  0.0.0
+ */
+function gather(): array
+{
+    $data = [];
+    $data['videos'] = [];
+
+    $conn = openConnection();
+    $sql = <<<EOF
+        SELECT
+            id,
+            title,
+            filename,
+            filetype,
+            filesize,
+            duration,
+            actors
+        FROM videos
+        WHERE id > ?
+    EOF;
+    $result = queryConnection(
+        $conn,
+        $sql,
+        [0],
+        "i"
+    )->get_result();
+    if ($result) {
+        $data['videos'] = $result->fetch_all(MYSQLI_ASSOC);
+    }
+    closeConnection($conn);
+    return $data;
+}
+
 if (!$_SERVER["REQUEST_METHOD"] == "POST") {
     // Only support POST
     // Return gets caught by fail directive in SPA
@@ -186,10 +281,18 @@ $errors = [];
 $data = [];
 
 if ($_POST['upload']) {
-    $submit_erros = upload();
-    if (!empty($submit_erros)) {
-        $errors['submit'] = $submit_erros;
+    $submit_errors = upload();
+    if (!empty($submit_errors)) {
+        $errors['submit'] = $submit_errors;
     }
+}
+
+if ($_POST['stream']) {
+    $errors = stream((int)$_POST['videoId']);
+}
+
+if ($_POST['gather']) {
+    $data = array_merge($data, gather());
 }
 
 if (!empty($errors)) {

@@ -1,6 +1,37 @@
-<html>
+<!DOCTYPE html>
 <head>
     <title>Video Portal</title>
+    <style>
+        body {
+            background-color: whitesmoke;
+        }
+
+        .container {
+            position:relative;
+            background-color: lightgray;
+            width: 360px;
+            height: 310px;
+            float: left;
+            margin: 1em;
+        }
+        .container video {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        .container p {
+            text-align: center;
+        }
+        .container .btn-holder {
+            position: absolute;
+            top: 98%;
+            -ms-transform: translateY(-90%);
+            transform: translateY(-90%);
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
         function removeResponses(){
@@ -42,6 +73,7 @@
                             $('form#upload-form').append(
                                 '<div class="response">Video successfully submitted!</div>'
                             );
+                            gatherVideos();
                         }
                     })
                     .fail(function (data) {
@@ -52,6 +84,100 @@
                     });
             });
         });
+    </script>
+    <script>
+        $(document).ready(function () {
+            gatherVideos();
+        });
+        function gatherVideos(){
+            document.getElementById('videos').innerHTML = '';
+            $.ajax({
+                type: 'POST',
+                url: './inc/db.php',
+                data: {
+                    gather: 'true'
+                },
+                dataType: 'json',
+                encode: true,
+                cache: false
+            })
+            .done(function(video_meta) {
+                console.log(video_meta);
+                $(video_meta.videos).each(function(n, video) {
+                    let thisVideo = $('<video />', {
+                        id: video.id,
+                        controls: true,
+                        width: 320,
+                        height: 240
+                    }).on('play', function(){
+                        // Prep ajax to receive binary data from PHP
+                        $.ajaxSetup({
+                            beforeSend: function (jqXHR, settings) {
+                                if (settings.dataType === 'binary')
+                                    settings.xhr = () => $.extend(new window.XMLHttpRequest(), {responseType:'arraybuffer'})
+                            }
+                        })
+                        // Send an AJAX request to a server-side script that streams the video data to the client
+                        $.ajax({
+                            url: './inc/db.php',
+                            type: 'POST',
+                            data: {
+                                stream: 'true',
+                                videoId: video.id
+                            },
+                            cache: false,
+                            dataType: 'binary',
+                            processData: 'false',
+                            responseType: 'arraybuffer',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            success: function(video_data) {
+                                $('<source />', {
+                                    type: video.filetype,
+                                    src: (URL || webkitURL).createObjectURL(new Blob([video_data], {type: video.filetype}))
+                                }).appendTo(thisVideo); //cheating, but $(this) is somehow not available
+                            },
+                            error: function (e) {
+                                console.log('Error: ' + e);
+                                $('#videos').append(
+                                    '<div class="response">This failed badly!</div>'
+                                );
+                            }
+                        });
+                    });
+                    let thisContainer = $('<div>',{
+                        'class' : 'container'
+                    });
+                    let thisText = $('<p>').text(video.title)
+                    let thisButtons = $('<div>',{
+                        'class' : 'btn-holder'
+                    });
+                    let thisXML = $('<button>',{
+                        'type' : 'submit',
+                        'value' : video.id,
+                    }).text('XML-Ansicht');
+                    let thisDelete = $('<button>',{
+                        'type' : 'submit',
+                        'value' : video.id,
+                    }).text('Entfernen');
+                    let thisEdit = $('<button>',{
+                        'type' : 'submit',
+                        'value' : video.id,
+                    }).text('Editieren');
+
+                    thisButtons.append(thisXML);
+                    thisButtons.append(thisDelete);
+                    thisButtons.append(thisEdit);
+                    thisContainer.append(thisText);
+                    thisContainer.append(thisVideo);
+                    thisContainer.append(thisButtons);
+                    thisContainer.appendTo('#videos');
+
+                });
+            })
+            .fail(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
     </script>
 </head>
 <body>
@@ -70,15 +196,6 @@
 </form>
 <hr>
 <h2>View Videos</h2>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Duration</th>
-        <th>Actors</th>
-        <th>Format</th>
-        <th>Action</th>
-    </tr>
-    <!-- PHP code to fetch and display the videos from the database goes here -->
-</table>
+<div id="videos"></div>
 </body>
 </html>

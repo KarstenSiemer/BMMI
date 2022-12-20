@@ -1,0 +1,84 @@
+<html>
+<head>
+    <title>Video Portal</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        function removeResponses(){
+            $('.response').each(function() {
+                $(this).remove();
+            });
+        }
+        $(document).ready(function () {
+            $('#upload-form').submit(function(event) {
+                event.preventDefault();
+                removeResponses();
+
+                var formData = new FormData();
+                formData.append('video', $('#video')[0].files[0]);
+                formData.append('title', $('#title').val());
+                formData.append('duration', $('#duration').val());
+                formData.append('actors', $('#actors').val());
+                formData.append('upload', 'true');
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "./inc/db.php",
+                    data: formData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                })
+                    .done(function (data) {
+                        console.log(data)
+                        if (!data.success) {
+                            $.each(data.errors.submit, function(i, row) {
+                                $('form#upload-form').append(
+                                  '<div class="response"><p>' + row.toString() + '</p></div>'
+                                );
+                            });
+                        } else {
+                            $('form#upload-form').append(
+                                '<div class="response">Video successfully submitted!</div>'
+                            );
+                        }
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                        $('form#upload-form').append(
+                            '<div class="response">This failed badly!</div>'
+                        );
+                    });
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Video Portal</h1>
+<h2>Upload Video</h2>
+<form id="upload-form" method="post" enctype="multipart/form-data">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title"><br>
+    <label for="duration">Duration:</label><br>
+    <input type="number" id="duration" name="duration" placeholder="in seconds"><br>
+    <label for="actors">Actors:</label><br>
+    <input type="text" id="actors" name="actors"><br>
+    <label for="video">Select video to upload:</label><br>
+    <input type="file" name="video" id="video"><br><br>
+    <input type="submit" value="Upload Video" name="submit">
+</form>
+<hr>
+<h2>View Videos</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Duration</th>
+        <th>Actors</th>
+        <th>Format</th>
+        <th>Action</th>
+    </tr>
+    <!-- PHP code to fetch and display the videos from the database goes here -->
+</table>
+</body>
+</html>

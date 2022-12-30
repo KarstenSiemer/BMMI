@@ -52,6 +52,12 @@ function openConnection(): mysqli
             . $conn->error
         );
     }
+    // This will do most of the Error handling as
+    // everything not binary or json will trigger the error
+    // function in JQuery, to not leak any database data.
+    // Currently, for checking the work, there
+    // are still console.logs in JQuery to ease finding errors, those
+    // should be removed in a real world scenario
     $conn->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
     return $conn;
 }
@@ -119,26 +125,28 @@ function queryConnection(
 /**
  * For uploading a video into the database
  *
- * @return array<int, array<int, string>>.
+ * @return array<int, string>
  * @since  0.0.0
  */
 function upload(): array
 {
+    // Usually you would do a lot of error checking here for
+    // e.g sting length or file size/type etc.
     $errors = [];
     if ($_FILES['file']['error'] != 0) {
-        $errors[] = ['Video upload failed.'];
+        $errors[] = 'Video upload failed.';
     }
     if (empty($_FILES['video'])) {
-        $errors[] = ['No Video attached.'];
+        $errors[] = 'No Video attached.';
     }
     if (empty($_POST['title'])) {
-        $errors[] = ['Video Title cannot be determined.'];
+        $errors[] = 'Video Title cannot be determined.';
     }
     if (empty($_POST['duration'])) {
-        $errors[] = ['Video Duration cannot be determined.'];
+        $errors[] = 'Video Duration cannot be determined.';
     }
     if (empty($_POST['actors'])) {
-        $errors[] = ['Video Actors cannot be determined.'];
+        $errors[] = 'Video Actors cannot be determined.';
     }
 
     if (!empty($errors)) {
@@ -176,6 +184,210 @@ function upload(): array
     return $errors;
 }
 
+/**
+ * For streaming a video from the database in chunks
+ *
+ * @param int $videoId id of the video to stream
+ *
+ * @return array<int, string>
+ * @since  0.0.0
+ */
+function stream(int $videoId): array
+{
+    $errors = [];
+
+    $conn = openConnection();
+    // could also get filesize, filetype handed over by jquery
+    // but since we need to either way fetch the content
+    // we might as well just get them here, too
+    // For proper production app, we would actually
+    // split the content in a separate table for performance
+    // boosts, for this low profile poc, there is no need
+    $sql = <<<EOF
+        SELECT content, filesize, filetype
+        FROM videos WHERE
+        id=?
+        LIMIT 1
+    EOF;
+    $result = queryConnection(
+        $conn,
+        $sql,
+        [$videoId],
+        "i"
+    )->get_result();
+    if ($result) {
+        $row = $result->fetch_assoc();
+        if (isset($row['content'])) {
+            $totalSize = $row['filesize'] ?? strlen($row['content']);
+            $fileType = $row['filetype'] ?? 'video/mp4';
+            header('Content-Type: ' . $fileType);
+            header('Content-Length: ' . $totalSize);
+            $chunkSize = 1024 * 1024; // 1MB chunks
+            $bytesSent = 0;
+            while ($bytesSent < $totalSize) {
+                $chunk = substr($row['content'], $bytesSent, $chunkSize);
+                echo $chunk;
+                flush();
+                $bytesSent += strlen($chunk);
+            }
+            $result->free_result();
+        } else {
+            $errors[] = 'Database table malformed.';
+        }
+    } else {
+        $errors[] = 'Video cannot be found.';
+    }
+    closeConnection($conn);
+    return $errors;
+}
+
+/**
+ * For returning video metadata
+ *
+ * @return array<string, array<string>>
+ * @since  0.0.0
+ */
+function gather(): array
+{
+    $data = [];
+    $data['videos'] = [];
+
+    $conn = openConnection();
+    $sql = <<<EOF
+        SELECT
+            id,
+            title,
+            filename,
+            filetype,
+            filesize,
+            duration,
+            actors
+        FROM videos
+        WHERE id > ?
+    EOF;
+    $result = queryConnection(
+        $conn,
+        $sql,
+        [0],
+        "i"
+    )->get_result();
+    if ($result) {
+        $data['videos'] = $result->fetch_all(MYSQLI_ASSOC);
+    }
+    closeConnection($conn);
+    return $data;
+}
+
+/**
+ * For deleting a Video
+ *
+ * @param string $videoId The id of the Video to delete
+ *
+ * @return array<string>
+ * @since  0.0.0
+ */
+function delete(string $videoId): array
+{
+    $errors = [];
+    if (empty($videoId)) {
+        $errors['videoId'] = "No todo id submitted.";
+        return $errors;
+    }
+    $conn = openConnection();
+    // If this query fails to delete, the error will be caught by
+    // MYSQLI_OPT_INT_AND_FLOAT_NATIVE and SPA will display failure statement
+    $sql = <<<EOF
+        DELETE FROM videos WHERE
+        id=?
+    EOF;
+    queryConnection(
+        $conn,
+        $sql,
+        [(int)$videoId],
+        "i"
+    );
+    closeConnection($conn);
+    return $errors;
+}
+
+/**
+ * For editing a video into the database
+ *
+ * @return array<int, string>
+ * @since  0.0.0
+ */
+function edit(): array
+{
+    // Usually you would do a lot of error checking here for
+    // e.g sting length or file size/type etc.
+    $errors = [];
+    $types = "";
+    $sets = [];
+    $payload = [];
+
+    if (!empty($_POST['title'])) {
+        $types .= "s";
+        $sets[] = 'title =?';
+        $payload[] = $_POST['title'];
+    }
+    if (!empty($_POST['actors'])) {
+        $types .= "s";
+        $sets[] = 'actors =?';
+        $payload[] = $_POST['actors'];
+    }
+    if (!empty($_POST['duration'])) {
+        $types .= "i";
+        $sets[] = 'duration =?';
+        $payload[] = (int)$_POST['duration'];
+    }
+    if (!empty($_FILES['video'])) {
+        if ($_FILES['file']['error'] != 0) {
+            $errors[] = 'Video upload failed.';
+            return $errors;
+        }
+        $types .= "ssib";
+        $sets[] = 'filename =?';
+        $payload[] = $_FILES['video']['name'];
+        $sets[] = 'filetype =?';
+        $payload[] = $_FILES['video']['type'];
+        $sets[] = 'filesize =?';
+        $payload[] = $_FILES['video']['size'];
+        $sets[] = 'content =?';
+        $payload[] = $_FILES['video']['tmp_name'];
+    }
+
+    if (empty($_POST['videoId'])) {
+        $errors[] = 'No videoId in payload.';
+        return $errors;
+    }
+
+    $types .= "i";
+    $payload[] = $_POST['videoId'];
+
+    if (empty($sets)) {
+        $errors[] = 'No data received.';
+        return $errors;
+    }
+
+    $set = implode(', ', $sets);
+    $conn = openConnection();
+    // If this query fails to insert, the error will be caught by
+    // MYSQLI_OPT_INT_AND_FLOAT_NATIVE and SPA will display failure statement
+    $sql = <<<EOF
+        UPDATE videos
+        SET {$set}
+        WHERE id=?
+    EOF;
+    queryConnection(
+        $conn,
+        $sql,
+        $payload,
+        $types
+    );
+    closeConnection($conn);
+    return $errors;
+}
+
 if (!$_SERVER["REQUEST_METHOD"] == "POST") {
     // Only support POST
     // Return gets caught by fail directive in SPA
@@ -186,10 +398,29 @@ $errors = [];
 $data = [];
 
 if ($_POST['upload']) {
-    $submit_erros = upload();
-    if (!empty($submit_erros)) {
-        $errors['submit'] = $submit_erros;
+    $submit_errors = upload();
+    if (!empty($submit_errors)) {
+        $errors['submit'] = $submit_errors;
     }
+}
+
+if ($_POST['edit']) {
+    $edit_errors = edit();
+    if (!empty($edit_errors)) {
+        $errors['edit'] = $edit_errors;
+    }
+}
+
+if ($_POST['stream']) {
+    $errors = stream((int)$_POST['videoId']);
+}
+
+if ($_POST['gather']) {
+    $data = array_merge($data, gather());
+}
+
+if ($_POST['delete']) {
+    $errors = array_merge($errors, delete($_POST['videoId']));
 }
 
 if (!empty($errors)) {

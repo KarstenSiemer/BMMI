@@ -1,13 +1,101 @@
-<html>
+<!DOCTYPE html>
 <head>
     <title>Video Portal</title>
+    <style>
+        body {
+            background-color: whitesmoke;
+        }
+
+        .container {
+            position:relative;
+            background-color: lightgray;
+            width: 360px;
+            height: 310px;
+            float: left;
+            margin: 1em;
+            border-radius: 10px;
+        }
+        .container video {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        .container p {
+            text-align: center;
+        }
+        .container .btn-holder {
+            position: absolute;
+            top: 98%;
+            -ms-transform: translateY(-90%);
+            transform: translateY(-90%);
+        }
+
+        .modalDialog {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 99999;
+            opacity:0;
+            -webkit-transition: opacity 400ms ease-in;
+            -moz-transition: opacity 400ms ease-in;
+            transition: opacity 400ms ease-in;
+            pointer-events: none;
+        }
+
+        .modalDialog:target {
+            opacity:1;
+            pointer-events: auto;
+        }
+
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: -moz-linear-gradient(#fff, #999);
+            background: -webkit-linear-gradient(#fff, #999);
+            background: -o-linear-gradient(#fff, #999);
+        }
+
+        .close {
+            background: #606061;
+            color: #FFFFFF;
+            line-height: 25px;
+            position: absolute;
+            right: -12px;
+            text-align: center;
+            top: -10px;
+            width: 24px;
+            text-decoration: none;
+            font-weight: bold;
+            -webkit-border-radius: 12px;
+            -moz-border-radius: 12px;
+            border-radius: 12px;
+            -moz-box-shadow: 1px 1px 3px #000;
+            -webkit-box-shadow: 1px 1px 3px #000;
+            box-shadow: 1px 1px 3px #000;
+        }
+
+        .close:hover { background: #a0a0a0; }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
+        // removes any response tags to remove old error messages
         function removeResponses(){
             $('.response').each(function() {
                 $(this).remove();
             });
         }
+        // console log is cool for developing and checking the work
+        // any console logging should be removed if this would make its way into the actual world
         $(document).ready(function () {
             $('#upload-form').submit(function(event) {
                 event.preventDefault();
@@ -30,28 +118,235 @@
                     cache: false,
                     timeout: 600000,
                 })
-                    .done(function (data) {
-                        console.log(data)
-                        if (!data.success) {
-                            $.each(data.errors.submit, function(i, row) {
-                                $('form#upload-form').append(
-                                  '<div class="response"><p>' + row.toString() + '</p></div>'
-                                );
-                            });
-                        } else {
+                .done(function (data) {
+                    console.log(data)
+                    if (!data.success) {
+                        $.each(data.errors.submit, function(i, row) {
                             $('form#upload-form').append(
-                                '<div class="response">Video successfully submitted!</div>'
+                              '<div class="response"><p>' + row.toString() + '</p></div>'
                             );
-                        }
-                    })
-                    .fail(function (data) {
-                        console.log(data)
+                        });
+                    } else {
                         $('form#upload-form').append(
-                            '<div class="response">This failed badly!</div>'
+                            '<div class="response">Video successfully submitted!</div>'
                         );
-                    });
+                        gatherVideos();
+                    }
+                })
+                .fail(function (data) {
+                    console.log(data)
+                    $('form#upload-form').append(
+                        '<div class="response">This failed badly!</div>'
+                    );
+                });
             });
         });
+    </script>
+    <script>
+        $(document).ready(function () {
+            gatherVideos();
+        });
+        function gatherVideos(){
+            document.getElementById('videos').innerHTML = '';
+            $.ajax({
+                type: 'POST',
+                url: './inc/db.php',
+                data: {
+                    gather: 'true'
+                },
+                dataType: 'json',
+                encode: true,
+                cache: false
+            })
+            .done(function(video_meta) {
+                console.log(video_meta);
+                $(video_meta.videos).each(function(n, video) {
+                    let thisVideo = $('<video />', {
+                        id: video.id,
+                        controls: true,
+                        width: 320,
+                        height: 240
+                    }).on('play', function(){
+                        // Prep ajax to receive binary data from PHP
+                        $.ajaxSetup({
+                            beforeSend: function (jqXHR, settings) {
+                                if (settings.dataType === 'binary')
+                                    settings.xhr = () => $.extend(new window.XMLHttpRequest(), {responseType:'arraybuffer'})
+                            }
+                        })
+                        // Send an AJAX request to a server-side script that streams the video data to the client
+                        $.ajax({
+                            url: './inc/db.php',
+                            type: 'POST',
+                            data: {
+                                stream: 'true',
+                                videoId: video.id
+                            },
+                            cache: false,
+                            dataType: 'binary',
+                            processData: 'false',
+                            responseType: 'arraybuffer',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            success: function(video_data) {
+                                $('<source />', {
+                                    type: video.filetype,
+                                    src: (URL || webkitURL).createObjectURL(new Blob([video_data], {type: video.filetype}))
+                                }).appendTo(thisVideo); //cheating, but $(this) is somehow not available
+                            },
+                            error: function (e) {
+                                console.log('Error: ' + e);
+                                $('#videos').append(
+                                    '<div class="response">This failed badly!</div>'
+                                );
+                            }
+                        });
+                    });
+                    let thisContainer = $('<div>',{
+                        'class' : 'container'
+                    });
+                    let thisText = $('<p>').text(video.title)
+                    let thisButtons = $('<div>',{
+                        'class' : 'btn-holder'
+                    });
+                    let thisXML = $('<button>',{
+                    }).text('XML-Ansicht').click(function (){
+                        document.getElementById('dynamicModal').innerHTML = '';
+                        $('<a>',{
+                            'href' : '#close',
+                            'title' : 'Close',
+                            'class' : 'close'
+                        }).text('X').appendTo('#dynamicModal');
+                        $('<h2>').text('XML Attributes view').appendTo('#dynamicModal');
+                        let xmlDoc = $.parseXML("<xml/>");
+                        let k, v;
+                        for (k in video) {
+                            if (video.hasOwnProperty(k)) {
+                                v = xmlDoc.createElement(k);
+                                $(v).text(video[k]);
+                                $('<pre>', {
+                                    'lang' : 'xml'
+                                }).text(v.outerHTML).appendTo('#dynamicModal');
+                            }
+                        }
+                        location.href = '#openModal';
+                    });
+                    let thisDelete = $('<button>',{
+                    }).text('Entfernen').click(function() {
+                        $.ajax({
+                            url: './inc/db.php',
+                            type: 'POST',
+                            data: {
+                                delete: 'true',
+                                videoId: video.id
+                            },
+                            cache: false,
+                            dataType: 'json',
+                            encode: true,
+                            cache: false
+                        })
+                        .done(function (data) {
+                            console.log(data)
+                            if (!data.success) {
+                                if (data.errors.videoId) {
+                                    $('#videos').append(
+                                        '<div class="response">' + data.errors.videoId + '</div>'
+                                    );
+                                }
+                            };
+                            gatherVideos();
+                        })
+                        .fail(function (data) {
+                            console.log(data)
+                            $('form#upload-form').append(
+                                '<div class="response">This failed badly!</div>'
+                            );
+                        });
+                    });
+                    let thisEdit = $('<button>',{
+                    }).text('Editieren').click(function (){
+                        document.getElementById('dynamicModal').innerHTML = '';
+                        $('<a>',{
+                            'href'  : '#close',
+                            'title' : 'Close',
+                            'class' : 'close'
+                        }).text('X').appendTo('#dynamicModal');
+                        $('<h2>').text('Edit a video').appendTo('#dynamicModal');
+                        $('<p>').text('Null values will be ignored').appendTo('#dynamicModal');
+                        let thisForm = $('#upload-form').clone().prop('id', 'edit-form');
+                        thisForm.find('*').each(function() {
+                            let thisFor = $(this).attr('for');
+                            if (thisFor !== undefined) {
+                                $(this).prop('for', 'edit-' + thisFor);
+                            }
+                            let thisId = $(this).attr('id');
+                            if (thisId !== undefined){
+                                $(this).prop('id', 'edit-' + thisId);
+                            }
+                        });
+                        thisForm.find(':submit').val('Edit Video');
+                        thisForm.appendTo('#dynamicModal');
+                        thisForm.submit(function(event) {
+                            event.preventDefault();
+                            removeResponses();
+
+                            let thisFormData = new FormData();
+                            thisFormData.append('video', $('#edit-video')[0].files[0]);
+                            thisFormData.append('title', $('#edit-title').val());
+                            thisFormData.append('duration', $('#edit-duration').val());
+                            thisFormData.append('actors', $('#edit-actors').val());
+                            thisFormData.append('edit', 'true');
+                            thisFormData.append('videoId', video.id);
+                            $.ajax({
+                                type: "POST",
+                                enctype: 'multipart/form-data',
+                                url: "./inc/db.php",
+                                data: thisFormData,
+                                dataType: 'json',
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                                timeout: 600000,
+                            })
+                                .done(function (data) {
+                                    console.log(data)
+                                    if (!data.success) {
+                                        $.each(data.errors.edit, function(i, row) {
+                                            $('#dynamicModal').append(
+                                                '<div class="response"><p>' + row.toString() + '</p></div>'
+                                            );
+                                        });
+                                    } else {
+                                        $('#dynamicModal').append(
+                                            '<div class="response">Video successfully edited!</div>'
+                                        );
+                                        gatherVideos();
+                                    }
+                                })
+                                .fail(function (data) {
+                                    console.log(data)
+                                    $('#dynamicModal').append(
+                                        '<div class="response">This failed badly!</div>'
+                                    );
+                                });
+                        });
+                        //thisForm.appendTo('#dynamicModal');
+                        location.href = '#openModal';
+                    });
+
+                    thisButtons.append(thisXML);
+                    thisButtons.append(thisDelete);
+                    thisButtons.append(thisEdit);
+                    thisContainer.append(thisText);
+                    thisContainer.append(thisVideo);
+                    thisContainer.append(thisButtons);
+                    thisContainer.appendTo('#videos');
+
+                });
+            })
+            .fail(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
     </script>
 </head>
 <body>
@@ -70,15 +365,11 @@
 </form>
 <hr>
 <h2>View Videos</h2>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Duration</th>
-        <th>Actors</th>
-        <th>Format</th>
-        <th>Action</th>
-    </tr>
-    <!-- PHP code to fetch and display the videos from the database goes here -->
-</table>
+<div id="videos"></div>
+<div id="openModal" class="modalDialog">
+    <div id="dynamicModal">
+        <a href="#close" title="Close" class="close">X</a>
+    </div>
+</div>
 </body>
 </html>

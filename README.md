@@ -36,10 +36,10 @@ Dies erlaubt es automatisch Scripte, welche Test- und Dokumentations-Aufgaben ü
     Dies ermöglicht es Variablen aus einer verschlüsselten Datei (`credentials.yaml`) in die
     Umgebung von Compose zu injezieren. Dies verhindert klartext Passwörter in die
     Versionsverwaltung abzulegen. Die Verschlüsselung erfolgt mittels eines privaten
-    GPG-Keys welcher *nicht* diesem Repo hinzugefügt wird, sondern seperat versendet wird.
+    GPG-Keys, welcher *nicht* diesem Repo hinzugefügt wird, sondern seperat versendet wird.
 * run-dump.bash
   * Stellt sicher, dass die lokale MariaDB läuft
-  * Erstellt einen Datenbank Dump und legt diesen lokal ab
+  * Erstellt einen Datenbank-Dump und legt diesen lokal ab
   * Die Secrets für die Ausführung wurden bereits von Docker-Compose in die Umgebung des
     Containers geladen
 * run-reconcile.bash
@@ -67,6 +67,24 @@ Dies erlaubt es automatisch Scripte, welche Test- und Dokumentations-Aufgaben ü
       * Verwendeter Coding-Standard ist [PEAR](https://pear.php.net/manual/en/standards.php)
     * php_stan()
       * Sucht ohne Unit-Tests nach Bugs und makiert diese
+* run-show.bash
+  * Wird als schneller shortcut verwendet, um sich den Inhalt der Datenbank anzuschauen
+  * Binary Video content wird beim Anzeigen auf 30 Zeichen limitiert
+  * Beispiel Output:
+
+```text
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+| id | title                                    | filename                       | filetype        | filesize | duration | actors               | content                        |
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+|  1 | Bear eating fish                         | movie.mp4                      | video/mp4       |   318465 |        6 | Some cool bear       |    ftypmp42    mp42isomavc1    |
+|  2 | World turning during night               | file_example_MP4_480_1_5MG.mp4 | video/mp4       |  1570024 |       30 | actually the world   |     ftypmp42    mp42mp41isomav |
+|  3 | A bunny having a cool day                | sample-mp4-file-medium.mp4     | video/mp4       |  1057149 |       10 | cute bunny           |     ftypisom   isomiso2avc1mp  |
+|  4 | Lego movie                               | small.mp4                      | video/mp4       |   383631 |       10 | Lego bricks          |    ftypmp42    mp42isomavc1    |
+|  5 | A stream of vehicles passing by the park | sample-15s.mp4                 | video/mp4       | 11916526 |       15 | Some dudes and stuff |     ftypisom   isomiso2avc1mp  |
+| 13 | Some girl sitting at the beach           | sample_960x540.mov             | video/quicktime |  1320742 |       13 | literally some girl  |    ftypqt     qt    wide       |
+| 14 | Apple ipod teaser                        | 320x240.m4v                    | video/x-m4v     |  2236480 |       75 | Ipod                 |     ftypM4V    M4V M4A mp42is  |
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+```
 
 ### Semantic-Release
 
@@ -90,7 +108,7 @@ Es werden zwei Container verwendet:
 #### Updates
 
 Um die enthaltenden Versionen aktuell zu halten, wird [Renovate](https://www.mend.io/free-developer-tools/renovate/) empfohlen.
-Renovate kann über GitHub eingebunden werden und verfügt über Plugins für z.B Docker-Compose um aktuell verwendete Versionen zu
+Renovate kann über GitHub eingebunden werden und verfügt über Plugins für z. B. Docker-Compose um aktuell verwendete Versionen zu
 erkennen und nach neueren zu Suchen und, falls Änderungsbedarf besteht, einen Pull-Request mit der Aktualisierung zu öffnen.
 
 ### DNS
@@ -109,10 +127,147 @@ Der A Record zeigt auf den localhost.
 
 ## Lösung der B-Aufgabe
 
-Alle Dateien sind in dem Ordner `todo` abgelegt.
+Alle Dateien sind in dem Ordner `app` abgelegt.
 
 Dieser wird über Docker-Compose in den Container mit dem Web-Server gemounted und über diesen
 Ausgeliefert.
+
+Der SQL Befehl zum Erstellen der Tabelle ist in `./app/inc/db.sql` abgelegt.
+Der SQL Befehl ist mittels `CREATE or REPLACE` definiert, um in der IDE immer den gleichen Befehl zum
+initialen Anlegen oder Löschen der Tabelle verwenden zu können. Dies erleichtert die Entwicklung der SPA.
+
+Die `index.html` verwendet nur HTML, CSS und JQuery, welches über AJAX mit der PHP Datenbank-Datei kommuniziert.
+Dies gewährleistet eine Single Page Application, welche nicht auf das Neu-Laden der SPA angewiesen ist, um
+eine Änderung in der Datenbank dazustellen.
+
+Die SPA ist in einen Upload und einen View bereich geteilt.
+Mit einer leeren Datenbanktabelle, ist auch das View-Abteil leer.
+
+![initial-empty](./screenshots/initial-leer.png)
+
+### Upload
+
+Füllt man beim Hochladen eines Videos, nicht alle wichtigen Felder aus, bekommt man eine Rückmeldung.
+Insgesamt wurde auf viele Möglichkeiten der Input-Validierung verzichtet.
+Beispielsweise welche Formate verwendet werden dürfen oder wie lang ein String oder wie groß ein Video sein darf.
+Die vorhandene Konfiguration sollte einen Video-Upload bis 12MB zulassen.
+
+![upload-keine-daten](./screenshots/upload-keine-daten.png)
+
+Trägt man die Daten korrekt ein und drückt den `upload` button, bekommt man eine Rückmeldung und das Video erscheint ohne Neuladen
+auf der SPA.
+
+![upload-successfull.png](./screenshots/upload-successfull.png)
+
+Drückt man nun auf das Video, wird es abgespielt.
+
+![play](./screenshots/play.png)
+
+Das interessante hier ist, dass das Video erst geladen wird, wenn es geklickt wird.
+So können sehr viele Videos in der SPA angezeigt werden, ohne eine lange Wartezeit beim ersten Laden.
+Auch hat dies zur Folge, dass nur genau die Videos heruntergeladen werden, welcher der Client wirklich
+sehen möchte.
+
+Die JQuery Funktion `gatherVideos` sammelt alle Video-Metadaten zusammen und erzeugt
+HTML container divs mit HTML Video tags, wo das `src` tag *noch* nicht vorhanden ist.
+Dieses tag wird über das `onplay event` des Videos hinzugefügt, welches nur getriggert wird, wenn
+es angeklickt wird.
+Das Ändern des `src` tags des Videos, löst implizit das Laden aus.
+AJAX bekommt nun die Daten des Videos in 1MB Blocken von PHP zugesandt.
+
+Die Vorteile dieses Vorgehens liegen auf der Hand, jedoch hat es auch einige Nachteile.
+Nach der offiziellen Dokumentation des Video tags, sollte es eigentlich vom Browser als kaputt
+markiert werden und ein weiteres Laden verhindert, da das `src` tag fehlt.
+Dadurch kann nie das `onplay event` ausgelöst werden und folglich auch `src` tag nicht nachgereicht werden.
+Der Browser Chrome geht RFC konform vor und verhindert das Laden eines Videos.
+Safari und FireFox erlauben es jedoch trotzdem und der Vorgang wird erfolgreich vollzogen.
+
+Ein weiterer Nachteil ist, dass die Implementation keine Informationen an PHP weitergibt, welcher Block
+genau geladen werden soll. PHP übergibt einfach stur nach und nach die Blöcke des ganzen Videos, was dazu
+führt, dass ein Vorspulen im Video erst möglich ist, sobald das ganze Video empfangen wurde.
+Außerdem, muss man warten bis ein Video vollständig heruntergeladen wurde, bis man das nächste anfangen kann.
+
+Es können nun verschiedene Formate hochgeladen und angezeigt werden.
+Beispiel Videos können im Ordner `./videos` gefunden werden.
+
+![play-videos](./screenshots/play-videos.png)
+
+Falls eine Abkürzung gewünscht ist, kann auch der beigefügte Datenbank-Dump geladen werden mittels:
+
+```bash
+./run-restore.bash
+```
+
+### XML-Ansicht
+
+Zum Anzeigen der Attribute wurde jedem Container ein Button `XML-Ansicht` spendiert.
+Es kann angenommen werden, dass die ursprüngliche Aufgabe die Verwendung von PHP vorgesehen hat um eine vollständige
+XML-Datei zu generieren.
+
+Dank AJAX befinden wir uns jedoch bereits in einer Schleife wo bereits alle nötigen Daten aus der
+Datenbank vorhanden sind.
+Erst das Klicken des Buttons erzeugt ein XML-Dokument, für welches keine
+weitere Abfrage der Datenbank vonnöten ist, die Last der generierung liegt vollständig beim Client und belastet nicht das eigene Backend.
+Das XML-Dokument, wird nun in einem HTML und CSS PopUp angezeigt.
+Hier wurde das erste Video mit dem Bären angeklickt.
+
+![baer-attributes](./screenshots/bear-attributes.png)
+
+Die Korrektheit kann über die Datenbank validiert werden:
+
+```bash
+./run-show.bash
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+| id | title                                    | filename                       | filetype        | filesize | duration | actors               | content                        |
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+|  1 | Bear eating fish                         | movie.mp4                      | video/mp4       |   318465 |        6 | Some cool bear       |    ftypmp42    mp42isomavc1   |
+...
+```
+
+### Editieren
+
+Wird der Button `Editieren` gedrückt, wird das Upload-Formular kopiert, die IDs mit dem prefix `edit-` versehen und in einem PopUp geöffnet.
+
+![edit](./screenshots/edit.png)
+
+Hier können nun alle Attribute des Videos verändert werden.
+Felder, wo nichts eingetragen wird, werden ignoriert und verbleiben unberührt.
+
+Editieren wir nun den Titel des Videos `Bear eating Fish`.
+
+![edited](./screenshots/edited.png)
+
+Wird im Popup der `edit` Knopf gedrückt, lädt sofort die Liste der Videos neu und
+der geänderte Titel kann betrachtet werden.
+
+Dabei sollte hier erwähnt werden, dass das Vorgehen im Hintergrund ineffizient designt
+ist, da immer alle Videos der Ansicht entfernt und neu hinzugefügt werden.
+Besser wäre es, wenn ein Abgleich der vorhandenen Videos geschehen würde, sodass
+nur Container neu geladen werden, wo es auch wirklich not tut.
+
+### Entfernen
+
+Klickt man den `Entfernen` Knopf eines Videos, wird die Ansicht neu geladen und das Video ist werder
+im View-Bereich noch in der Datenbank vorhanden. Hier wurde nun das Video mit der ID `1` bzw. dem
+geändertem Titel "Average fish enjoyer Baloo".
+
+Ein Blick in die Datenbank validiert diese Annahme:
+
+```bash
+./run-show.bash
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+| id | title                                    | filename                       | filetype        | filesize | duration | actors               | content                        |
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+|  2 | World turning during night               | file_example_MP4_480_1_5MG.mp4 | video/mp4       |  1570024 |       30 | actually the world   |     ftypmp42    mp42mp41isomav |
+|  3 | A bunny having a cool day                | sample-mp4-file-medium.mp4     | video/mp4       |  1057149 |       10 | cute bunny           |     ftypisom   isomiso2avc1mp  |
+|  4 | Lego movie                               | small.mp4                      | video/mp4       |   383631 |       10 | Lego bricks          |    ftypmp42    mp42isomavc1    |
+|  5 | A stream of vehicles passing by the park | sample-15s.mp4                 | video/mp4       | 11916526 |       15 | Some dudes and stuff |     ftypisom   isomiso2avc1mp  |
+| 13 | Some girl sitting at the beach           | sample_960x540.mov             | video/quicktime |  1320742 |       13 | literally some girl  |    ftypqt     qt    wide       |
+| 14 | Apple ipod teaser                        | 320x240.m4v                    | video/x-m4v     |  2236480 |       75 | Ipod                 |     ftypM4V    M4V M4A mp42is  |
++----+------------------------------------------+--------------------------------+-----------------+----------+----------+----------------------+--------------------------------+
+```
+
+Für den abschließenden Commit, wurde das Ändern des Titels, sowie dem Löschen des Videos mittels `./run-restore` rückgängig gemacht.
 
 ### Arbeitsflow
 
@@ -154,7 +309,7 @@ ausführen, um einen passenden Datenbankstand zu der bisher geleisteten Arbeit v
 
 Nun fängt er an zu arbeiten bis er gerne einen Test ausführen möchte oder eine Pause machen will.
 
-Dann commitet er seine Arbeit mit z.B.
+Dann committet er seine Arbeit mit z.B.
 
 ```bash
 git commit -s -am "feat(login): add jquery content in todo.html" && git push

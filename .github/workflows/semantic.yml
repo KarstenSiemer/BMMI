@@ -7,11 +7,15 @@ on:
   push:
     branches: [ "main" ]
 
+permissions:
+  contents: write
+  issues: read
+
 jobs:
   semantic:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v3
         id: semantic

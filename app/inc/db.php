@@ -218,14 +218,17 @@ function stream(int $videoId): array
     if ($result) {
         $row = $result->fetch_assoc();
         if (isset($row['content'])) {
-            $totalSize = $row['filesize'] ?? strlen($row['content']);
+            $totalSize = $row['filesize'] ??
+              (is_string($row['content']) ?
+              strlen($row['content']) : 0);
             $fileType = $row['filetype'] ?? 'video/mp4';
             header('Content-Type: ' . $fileType);
             header('Content-Length: ' . $totalSize);
             $chunkSize = 1024 * 1024; // 1MB chunks
             $bytesSent = 0;
             while ($bytesSent < $totalSize) {
-                $chunk = substr($row['content'], $bytesSent, $chunkSize);
+                $chunk = is_string($row['content']) ?
+                  substr($row['content'], $bytesSent, $chunkSize) : '';
                 echo $chunk;
                 flush();
                 $bytesSent += strlen($chunk);

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bmmi
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: bmmi.prod.127.0.0.1.nip.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: bmmi-web
+                port:
+                  name: http
+            path: /
+            pathType: Prefix

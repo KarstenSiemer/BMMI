@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bmmi-web
+  labels:
+    app: bmmi-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bmmi-web
+  template:
+    metadata:
+      labels:
+        app: bmmi-web
+    spec:
+      containers:
+        - name: php-apache
+          image: webdevops/php-apache:8.0
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          env:
+            - name: WEB_DOCUMENT_INDEX
+              value: 'index.html'
+            - name: DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: bmmi-db
+                  key: DATABASE
+            - name: DATABASE_HOST
+              value: bmmi-db
+            - name: DATABASE_PORT
+              value: '3306'
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: bmmi-db
+                  key: DATABASE_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bmmi-db
+                  key: DATABASE_PASSWORD
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop: ['ALL']
+            readOnlyRootFilesystem: true
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            timeoutSeconds: 2
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 2
+            periodSeconds: 5

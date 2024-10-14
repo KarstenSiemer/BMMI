@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bmmi-db
+  labels:
+    app: bmmi-db
+spec:
+  serviceName: 'bmmi-db'
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bmmi-db
+  template:
+    metadata:
+      labels:
+        app: bmmi-db
+    spec:
+      containers:
+        - name: mariadb
+          command: ['--default-authentication-plugin=mysql_native_password']
+          image: mariadb:10.10.2
+          ports:
+            - containerPort: 3306
+            - containerPort: 33060
+          env:
+            - name: MARIADB_RANDOM_ROOT_PASSWORD
+              value: 'true'
+            - name: MARIADB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: bmmi-db
+                  key: DATABASE
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: bmmi-db
+                  key: DATABASE_USER
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bmmi-db
+                  key: DATABASE_PASSWORD
+            - name: MARIADB_AUTO_UPGRADE
+              value: 'true'
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '100m'
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop: ['ALL']
+            readOnlyRootFilesystem: false
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - mysqladmin status -u ${DATABASE_USER} -p${DATABASE_PASSWORD}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - 'mysqladmin ping -u ${DATABASE_USER} -p${DATABASE_PASSWORD}'
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: bmmi-db-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: db-storage
+      spec:
+        accessModes: ['ReadWriteOnce']
+        resources:
+          requests:
+            storage: 1Gi

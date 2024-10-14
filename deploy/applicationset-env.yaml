@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bmmi
+spec:
+  goTemplate: true
+  goTemplateOptions: ['missingkey=error']
+  generators:
+    - clusters:
+      selector:
+        matchLabels:
+          env: 'true'
+  template:
+    metadata:
+      name: 'bmmi'
+    spec:
+      project: '{{.name}}'
+      source:
+        repoURL: git@github.com:KarstenSiemer/BMMI.git
+        targetRevision: main
+        path: 'deploy/kustomize/overlays/{{.name}}'
+        kustomize:
+          commonAnnotationsEnvsubst: true
+          commonAnnotations:
+            app-source: ${ARGOCD_APP_NAME}
+          commonLabels:
+            app.kubernetes.io/instance: '{{.name}}'
+          patches:
+            - target:
+                kind: Deployment
+                name: bmmi
+              patch: |-
+                - op: add
+                  path: "/spec/template/spec/containers/0/env/-"
+                  value:
+                    name: WEB_ALIAS_DOMAIN
+                    value: bmmi.{{.name}}.127.0.0.1.nip.io
+            - target:
+                kind: Ingress
+                name: bmmi
+              patch: |-
+                - op: replace
+                  path: /spec/rules/0/host
+                  value: bmmi.{{.name}}.127.0.0.1.nip.io
+      destination:
+        name: '{{.name}}'
+        namespace: bmmi
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+          - PruneLast=true

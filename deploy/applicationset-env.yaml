@@ -7,9 +7,9 @@ spec:
   goTemplateOptions: ['missingkey=error']
   generators:
     - clusters:
-      selector:
-        matchLabels:
-          env: 'true'
+        selector:
+          matchLabels:
+            env: 'true'
   template:
     metadata:
       name: 'bmmi'

@@ -12,7 +12,7 @@ spec:
             env: 'true'
   template:
     metadata:
-      name: 'bmmi'
+      name: 'bmmi-{{.name}}'
     spec:
       project: '{{.name}}'
       source:

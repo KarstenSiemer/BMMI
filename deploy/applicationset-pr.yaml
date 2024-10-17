@@ -7,12 +7,12 @@ spec:
   goTemplateOptions: ['missingkey=error']
   generators:
     - pullRequest:
-      github:
-        owner: KarstenSiemer
-        repo: BMMI
-        tokenRef:
-          secretName: github-token
-          key: password
+        github:
+          owner: KarstenSiemer
+          repo: BMMI
+          tokenRef:
+            secretName: argocd-secret
+            key: webhook.github.secret
   template:
     metadata:
       name: 'bmmi-pr-{{.number}}'

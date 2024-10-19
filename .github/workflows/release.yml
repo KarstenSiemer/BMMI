@@ -1,0 +1,41 @@
+name: Release
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  semantic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semantic Release Dry Run
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic-dry
+        with:
+          dry_run: true
+      - uses: yokawasa/action-setup-kube-tools@v0.11.1
+        if: steps.semantic-dry.outputs.new_release_published == 'true'
+        with:
+          kustomize: '5.5.0'
+      - name: Change PR image sha
+        if: steps.semantic-dry.outputs.new_release_published == 'true'
+        run: |
+          cd deploy/kustomize/base/core
+          kustomize edit set image karstensiemer/bmmi=:${{ steps.semantic-dry.outputs.new_release_version }}
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.semantic-dry.outputs.new_release_published == 'true'
+        with:
+          commit_message: 'fix(core): set release image'
+          commit_options: '--no-verify --signoff'
+          add_options: '-u'
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic

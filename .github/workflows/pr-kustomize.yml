@@ -1,25 +1,34 @@
 name: Kustomize
 
+env:
+  LABELS: ''
+  LABEL: 'kustomize'
+
 on:
   pull_request:
-    branches: ['main']
+    types: [synchronize, opened]
+  pull_request_target:
     types: [labeled]
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   kustomize:
-    if: contains(github.event.pull_request.labels.*.name, 'kustomize')
     runs-on: ubuntu-latest
     steps:
+      - uses: snnaplab/get-labels-action@v1
       - name: Checkout
+        if: contains(fromJSON(env.LABELS), env.LABEL)
         uses: actions/checkout@v4
       - uses: yokawasa/action-setup-kube-tools@v0.11.1
+        if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
           kustomize: '5.5.0'
           kube-score: '1.19.0'
       - name: Check manifest for validity
+        if: contains(fromJSON(env.LABELS), env.LABEL)
         run: |
           # Check if yamls are kustomizable and compliant
           find deploy/kustomize -type f -name \

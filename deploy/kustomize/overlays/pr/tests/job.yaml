@@ -7,7 +7,15 @@ spec:
     spec:
       containers:
         - name: hello-world
-          image: busybox
+          image: busybox:1.37
+          imagePullPolicy: Always
           command: ['echo', 'Hello, World!']
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '100m'
+            limits:
+              memory: '128Mi'
+              cpu: '100m'
       restartPolicy: Never
   backoffLimit: 4 # Optional: How many times to retry if the job fails

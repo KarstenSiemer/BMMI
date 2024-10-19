@@ -1,0 +1,35 @@
+name: Kustomize
+
+on:
+  pull_request:
+    branches: ['main']
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  kustomize:
+    if: contains(github.event.pull_request.labels.*.name, 'kustomize')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: yokawasa/action-setup-kube-tools@v0.11.1
+        with:
+          kustomize: '5.5.0'
+          kube-score: '1.19.0'
+      - name: Check manifest for validity
+        run: |
+          # Check if yamls are kustomizable and compliant
+          find deploy/kustomize -type f -name \
+            "kustomization.yaml" | xargs -S1024 -P 4 -I {} sh -c \
+            'kustomize build "$(dirname {})" | \
+            kube-score score \
+              --ignore-test pod-networkpolicy \
+              --ignore-test container-ephemeral-storage-request-and-limit \
+              --ignore-test container-security-context-readonlyrootfilesystem \
+              --ignore-test container-security-context-user-group-id \
+              --ignore-test container-security-context-privileged \
+              --ignore-test container-security-context-readonlyrootfilesystem - ' \
+            || exit 1

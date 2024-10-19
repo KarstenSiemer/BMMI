@@ -1,0 +1,24 @@
+deploy:
+  - changed-files:
+      - any-glob-to-any-file:
+          ['deploy/kustomize/base/**', 'deploy/kustomize/overlays/pr/**']
+
+build:
+  - changed-files:
+      - any-glob-to-any-file: ['Dockerfile', 'app/**']
+
+kustomize:
+  - changed-files:
+      - any-glob-to-any-file: ['deploy/kustomize/**']
+
+dev:
+  - changed-files:
+      - any-glob-to-any-file: ['deploy/kustomize/overlay/dev/**']
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: ['deploy/kustomize/overlay/test/**']
+
+prod:
+  - changed-files:
+      - any-glob-to-any-file: ['deploy/kustomize/overlay/prod/**']

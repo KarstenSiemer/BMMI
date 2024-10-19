@@ -4,3 +4,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
+
+images:
+  - name: karstensiemer/bmmi
+    newTag: 'v1.3.2'

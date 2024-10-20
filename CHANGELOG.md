@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/KarstenSiemer/BMMI/compare/v1.4.0...v1.4.1) (2024-10-20)
+
+
+### Bug Fixes
+
+* **ci:** commit release changes using semantic relase ci ([547e0b0](https://github.com/KarstenSiemer/BMMI/commit/547e0b0e0c0303e9b480b6c1eb988af15b7be0ec))
+* **core:** set bmmi release image to 1.4.1 ([f775597](https://github.com/KarstenSiemer/BMMI/commit/f77559799659bb4f5263d37897f263203f4670c4))
+
 # [1.4.0](https://github.com/KarstenSiemer/BMMI/compare/v1.3.2...v1.4.0) (2024-10-20)
 
 

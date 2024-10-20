@@ -1,26 +1,26 @@
-version: "3.9"
+version: '3.9'
 services:
   web:
     container_name: bmmi-web
     image: webdevops/php-apache:8.0
     restart: unless-stopped
     ports:
-      - 8443:443
-      - 8080:80
+      - 4443:443
+      - 4080:80
     environment:
       WEB_DOCUMENT_INDEX: index.html
       WEB_ALIAS_DOMAIN: bmmi.unifi.karstensiemer.de
-      DATABASE: "${DATABASE}"
-      DATABASE_HOST: "database"
-      DATABASE_PORT: "3306"
-      DATABASE_USER: "${DATABASE_USER}"
-      DATABASE_PASSWORD : "${DATABASE_PASSWORD}"
+      DATABASE: '${DATABASE}'
+      DATABASE_HOST: 'database'
+      DATABASE_PORT: '3306'
+      DATABASE_USER: '${DATABASE_USER}'
+      DATABASE_PASSWORD: '${DATABASE_PASSWORD}'
     volumes:
       - './app:/app'
     networks:
       - bmmi-net
     links:
-      - "db:database"
+      - 'db:database'
   db:
     container_name: bmmi-db
     image: mariadb:10.10.2
@@ -30,11 +30,11 @@ services:
       - 3306:3306
       - 33060:33060
     environment:
-      MARIADB_RANDOM_ROOT_PASSWORD: "true"
-      MARIADB_DATABASE: "${DATABASE}"
-      MARIADB_USER: "${DATABASE_USER}"
-      MARIADB_PASSWORD: "${DATABASE_PASSWORD}"
-      MARIADB_AUTO_UPGRADE: "true"
+      MARIADB_RANDOM_ROOT_PASSWORD: 'true'
+      MARIADB_DATABASE: '${DATABASE}'
+      MARIADB_USER: '${DATABASE_USER}'
+      MARIADB_PASSWORD: '${DATABASE_PASSWORD}'
+      MARIADB_AUTO_UPGRADE: 'true'
     volumes:
       - 'bmmi-db:/var/lib/mysql'
     networks:

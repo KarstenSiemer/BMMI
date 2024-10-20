@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: hello-world-job
+  annotations:
+    kube-score/ignore: pod-networkpolicy,container-ephemeral-storage-request-and-limit,container-security-context-readonlyrootfilesystem,container-security-context-user-group-id,container-security-context-privileged,container-security-context-readonlyrootfilesystem
 spec:
   template:
     spec:
@@ -9,7 +11,7 @@ spec:
         - name: hello-world
           image: busybox:1.37
           imagePullPolicy: Always
-          command: ['echo', 'Hello, World!']
+          command: ['echo', 'Hello, World!!']
           resources:
             requests:
               memory: '128Mi'

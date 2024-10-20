@@ -11,4 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: yokawasa/action-setup-kube-tools@v0.11.1
+        with:
+          kustomize: '5.5.0'
+          kube-score: '1.19.0'
       - uses: pre-commit/action@v3.0.1

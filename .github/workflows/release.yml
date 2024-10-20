@@ -49,7 +49,11 @@ jobs:
       - name: Change PR image sha
         if: steps.semantic-dry.outputs.new_release_published == 'true'
         run: |
+          echo "Setting base/core to current release"
           cd deploy/kustomize/base/core
+          kustomize edit set image karstensiemer/bmmi=:${{ steps.semantic-dry.outputs.new_release_version }}
+          echo "Resetting overlays/pr to current release to be up to date for next PR"
+          cd ../../overlays/pr
           kustomize edit set image karstensiemer/bmmi=:${{ steps.semantic-dry.outputs.new_release_version }}
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: steps.semantic-dry.outputs.new_release_published == 'true'

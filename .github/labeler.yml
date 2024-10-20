@@ -22,3 +22,7 @@ test:
 prod:
   - changed-files:
       - any-glob-to-any-file: ['deploy/kustomize/overlay/prod/**']
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**', '.*']

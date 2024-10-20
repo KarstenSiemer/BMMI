@@ -1,10 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
 
 images:
-  - name: karstensiemer/bmmi
-    newTag: 'v1.3.2'
+- name: karstensiemer/bmmi
+  newTag: 1.4.0

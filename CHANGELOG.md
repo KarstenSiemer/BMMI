@@ -1,3 +1,11 @@
+## [1.4.2](https://github.com/KarstenSiemer/BMMI/compare/v1.4.1...v1.4.2) (2024-10-20)
+
+
+### Bug Fixes
+
+* **ci:** compliant release flow ([f1c0e73](https://github.com/KarstenSiemer/BMMI/commit/f1c0e73e41e0df967d94d8ab3360f71947930d5a))
+* **core:** set bmmi release image to 1.4.2 ([566affc](https://github.com/KarstenSiemer/BMMI/commit/566affcb38501ca5f61b68fea386953be5f96ae5))
+
 ## [1.4.1](https://github.com/KarstenSiemer/BMMI/compare/v1.4.0...v1.4.1) (2024-10-20)
 
 

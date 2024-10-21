@@ -1,3 +1,11 @@
+## [1.4.3](https://github.com/KarstenSiemer/BMMI/compare/v1.4.2...v1.4.3) (2024-10-20)
+
+
+### Bug Fixes
+
+* **ci:** build multiarch ([f715e1a](https://github.com/KarstenSiemer/BMMI/commit/f715e1a7e679637da64808e8454ce90c983277c9))
+* **core:** set bmmi release image to 1.4.3 ([57169eb](https://github.com/KarstenSiemer/BMMI/commit/57169ebe0d54a7413301f30a11afc5514e9b04a8))
+
 ## [1.4.2](https://github.com/KarstenSiemer/BMMI/compare/v1.4.1...v1.4.2) (2024-10-20)
 
 

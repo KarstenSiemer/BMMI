@@ -22,6 +22,8 @@ jobs:
       - name: Checkout
         if: contains(fromJSON(env.LABELS), env.LABEL)
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - name: Set up QEMU
         if: contains(fromJSON(env.LABELS), env.LABEL)
         uses: docker/setup-qemu-action@v3
@@ -54,8 +56,10 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
-          commit_message: 'fix(pr): set pr overlay image'
+          commit_message: 'fix(pr): set pr overlay image to karstensiemer/bmmi-pr:${{ github.sha }}'
           commit_options: '--no-verify --signoff'
           add_options: '-u'
       - uses: actions/labeler@v5
         if: contains(fromJSON(env.LABELS), env.LABEL)
+        with:
+          sync-labels: true

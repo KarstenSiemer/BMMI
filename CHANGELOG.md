@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/KarstenSiemer/BMMI/compare/v1.4.3...v1.5.0) (2024-10-21)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.5.0 ([3775cdb](https://github.com/KarstenSiemer/BMMI/commit/3775cdbc9e1f9105db234a3fa5c43d50315a5e1c))
+
+
+### Features
+
+* **probes:** add ready and liveness probes ([#9](https://github.com/KarstenSiemer/BMMI/issues/9)) ([a2bb646](https://github.com/KarstenSiemer/BMMI/commit/a2bb64651d3c15dbbb50552260d27e7a454bf8fb))
+
 ## [1.4.3](https://github.com/KarstenSiemer/BMMI/compare/v1.4.2...v1.4.3) (2024-10-20)
 
 

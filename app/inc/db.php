@@ -13,70 +13,8 @@
  * @since    0.0.0
  */
 
-/**
- * For opening a database connection
- *
- * Reads from environment and uses this data to connect to the database.
- *
- * @since 0.0.0
- *
- * @return mysqli database connection.
- */
-function openConnection(): mysqli
-{
-    $dbhost  = getenv('DATABASE_HOST')      ?: null;
-    $dbuser  = getenv('DATABASE_USER')      ?: null;
-    $dbpass  = getenv('DATABASE_PASSWORD')  ?: null;
-    $dbport  = (int)getenv('DATABASE_PORT') ?: null;
-    $db      = getenv('DATABASE')           ?: null;
-    $charset = 'utf8mb4';
-
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-    $conn = new mysqli(
-        $dbhost,
-        $dbuser,
-        $dbpass,
-        $db,
-        $dbport
-    );
-    if ($conn->connect_errno) {
-        throw new RuntimeException(
-            'mysqli connection error: '
-            . $conn->connect_error
-        );
-    }
-    $conn->set_charset($charset);
-    if ($conn->errno) {
-        throw new RuntimeException(
-            'mysqli error: '
-            . $conn->error
-        );
-    }
-    // This will do most of the Error handling as
-    // everything not binary or json will trigger the error
-    // function in JQuery, to not leak any database data.
-    // Currently, for checking the work, there
-    // are still console.logs in JQuery to ease finding errors, those
-    // should be removed in a real world scenario
-    $conn->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
-    return $conn;
-}
-
-/**
- * For closing a database connection
- *
- * Closes passed db connection.
- *
- * @param mysqli $conn database connection
- *
- * @since 0.0.0
- *
- * @return void
- */
-function closeConnection(mysqli $conn): void
-{
-    $conn -> close();
-}
+ // Include the database connection functions
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
 
 /**
  * For querying database connection

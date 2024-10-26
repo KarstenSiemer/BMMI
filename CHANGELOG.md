@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/KarstenSiemer/BMMI/compare/v1.5.0...v1.6.0) (2024-10-26)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.6.0 ([56fc575](https://github.com/KarstenSiemer/BMMI/commit/56fc5752e8b82dd0e97944eb9771abb03610bf07))
+
+
+### Features
+
+* **kustomize:** port naming ([#10](https://github.com/KarstenSiemer/BMMI/issues/10)) ([1ce4e68](https://github.com/KarstenSiemer/BMMI/commit/1ce4e68efbad5628617deb98f64c4836e9d252cf))
+
 # [1.5.0](https://github.com/KarstenSiemer/BMMI/compare/v1.4.3...v1.5.0) (2024-10-21)
 
 

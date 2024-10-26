@@ -13,6 +13,9 @@ spec:
           tokenRef:
             secretName: argocd-secret
             key: webhook.github.secret
+          labels:
+            - deploy
+        requeueAfterSeconds: 30
   template:
     metadata:
       name: 'bmmi-pr-{{.number}}'

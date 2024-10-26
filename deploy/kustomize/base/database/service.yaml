@@ -9,7 +9,9 @@ spec:
   ports:
     - port: 3306
       targetPort: 3306
+      name: mysql
     - port: 33060
+      name: mysqlx
       targetPort: 33060
   clusterIP: None # Headless service
   selector:

@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - name: Semantic Release Dry Run
         uses: cycjimmy/semantic-release-action@v4
         id: semantic-dry

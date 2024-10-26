@@ -23,7 +23,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+              name: http
             - containerPort: 443
+              name: https
           env:
             - name: WEB_DOCUMENT_INDEX
               value: 'index.html'

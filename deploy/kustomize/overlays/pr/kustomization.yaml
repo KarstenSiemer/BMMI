@@ -5,4 +5,4 @@ resources:
 - tests
 images:
 - name: karstensiemer/bmmi
-  newTag: 1.6.0
+  newTag: 1.6.1

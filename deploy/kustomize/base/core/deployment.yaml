@@ -55,10 +55,6 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '250m'
-          securityContext:
-            capabilities:
-              drop: ['ALL']
-            readOnlyRootFilesystem: true
           readinessProbe:
             httpGet:
               path: /

@@ -50,7 +50,7 @@ spec:
               value: 'true'
           volumeMounts:
             - name: db-storage
-              mountPath: /var/lib/mysql
+              mountPath: /var/lib/mysql/
           resources:
             requests:
               memory: '256Mi'
@@ -63,7 +63,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - mysqladmin status -u ${DATABASE_USER} -p${DATABASE_PASSWORD}
+                - mysqladmin status -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 1
@@ -74,7 +74,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - 'mysqladmin ping -u ${DATABASE_USER} -p${DATABASE_PASSWORD}'
+                - mysqladmin ping -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5

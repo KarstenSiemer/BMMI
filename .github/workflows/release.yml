@@ -9,7 +9,10 @@ on:
 
 permissions:
   contents: write
-  issues: read
+  issues: write
+  pull-requests: write
+  checks: write
+  statuses: write
 
 jobs:
   semantic:

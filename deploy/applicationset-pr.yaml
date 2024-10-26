@@ -28,7 +28,7 @@ spec:
         kustomize:
           nameSuffix: -pr-{{.number}}
           commonLabels:
-            app.kubernetes.io/instance: '{{.branch}}-{{.number}}'
+            app.kubernetes.io/instance: 'pr-{{.number}}'
           commonAnnotationsEnvsubst: true
           commonAnnotations:
             app-source: ${ARGOCD_APP_NAME}

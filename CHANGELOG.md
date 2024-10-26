@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/KarstenSiemer/BMMI/compare/v1.6.0...v1.6.1) (2024-10-26)
+
+
+### Bug Fixes
+
+* **app:** bmmi sec context & db container arg ([#11](https://github.com/KarstenSiemer/BMMI/issues/11)) ([4df40e6](https://github.com/KarstenSiemer/BMMI/commit/4df40e63706fc32425942eb65dcccba3bb64c830))
+* **core:** set bmmi release image to 1.6.1 ([dc2cff0](https://github.com/KarstenSiemer/BMMI/commit/dc2cff0550ad075740ff6a9480f71dc14dbac31a))
+
 # [1.6.0](https://github.com/KarstenSiemer/BMMI/compare/v1.5.0...v1.6.0) (2024-10-26)
 
 

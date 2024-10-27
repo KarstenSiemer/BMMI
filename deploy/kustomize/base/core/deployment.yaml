@@ -57,8 +57,13 @@ spec:
               cpu: '250m'
           readinessProbe:
             httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            timeoutSeconds: 2
-            periodSeconds: 5
+              path: /healthz/ready.php
+              port: http
+            timeoutSeconds: 3
+            successThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz/live.php
+              port: http
+            timeoutSeconds: 3
+            successThreshold: 3

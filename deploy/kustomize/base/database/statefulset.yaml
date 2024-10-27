@@ -64,11 +64,8 @@ spec:
                 - /bin/sh
                 - -c
                 - mysqladmin status -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 1
-            successThreshold: 1
-            failureThreshold: 3
+            timeoutSeconds: 3
+            successThreshold: 3
           livenessProbe:
             exec:
               command:
@@ -76,8 +73,7 @@ spec:
                 - -c
                 - mysqladmin ping -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
             initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 3
       volumes:
         - name: db-storage
           persistentVolumeClaim:

@@ -1,3 +1,11 @@
+## [1.6.2](https://github.com/KarstenSiemer/BMMI/compare/v1.6.1...v1.6.2) (2024-10-27)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.6.2 ([304980d](https://github.com/KarstenSiemer/BMMI/commit/304980d6f8038a2abd7b78ee13d86a02cf9b8752))
+* **kustomize:** mysql settings ([#12](https://github.com/KarstenSiemer/BMMI/issues/12)) ([db2baf5](https://github.com/KarstenSiemer/BMMI/commit/db2baf5a43f64cd59496041b0c5642c02ece52b1))
+
 ## [1.6.1](https://github.com/KarstenSiemer/BMMI/compare/v1.6.0...v1.6.1) (2024-10-26)
 
 

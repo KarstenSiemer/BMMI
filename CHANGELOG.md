@@ -1,3 +1,11 @@
+## [1.6.3](https://github.com/KarstenSiemer/BMMI/compare/v1.6.2...v1.6.3) (2024-10-27)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.6.3 ([2609ae7](https://github.com/KarstenSiemer/BMMI/commit/2609ae7874cbf92cd3b8e9a55db910b366c55d35))
+* **kustomize:** adjust probes ([#13](https://github.com/KarstenSiemer/BMMI/issues/13)) ([f333474](https://github.com/KarstenSiemer/BMMI/commit/f333474a510be889dac37ac946144d8a71815345))
+
 ## [1.6.2](https://github.com/KarstenSiemer/BMMI/compare/v1.6.1...v1.6.2) (2024-10-27)
 
 

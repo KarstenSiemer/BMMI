@@ -6,4 +6,4 @@ resources:
 images:
 - name: karstensiemer/bmmi
   newName: karstensiemer/bmmi-pr
-  newTag: 0259c89a5e9a6fae851c662205ca10385fb149e2
+  newTag: ce6686afb02fcde0d6aeecbb6b4bc2e843623e20

@@ -65,5 +65,5 @@ spec:
             httpGet:
               path: /healthz/live.php
               port: http
+            initialDelaySeconds: 30
             timeoutSeconds: 3
-            successThreshold: 3

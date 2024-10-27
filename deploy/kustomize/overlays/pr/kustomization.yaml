@@ -3,6 +3,19 @@ kind: Kustomization
 resources:
 - ../../base/
 - tests
+
+replacements:
+- source:
+    kind: Service
+    name: bmmi-db
+  targets:
+  - fieldPaths:
+    - spec.template.spec.containers.[name=php-apache].env.[name=DATABASE_HOST].value
+    select:
+      kind: Deployment
+      name: bmmi-web
+
 images:
 - name: karstensiemer/bmmi
-  newTag: 1.6.2
+  newName: karstensiemer/bmmi-pr
+  newTag: e476e22d09a82071afe27858ca3394041e5a7be5

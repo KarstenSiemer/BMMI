@@ -5,4 +5,5 @@ resources:
 - tests
 images:
 - name: karstensiemer/bmmi
-  newTag: 1.6.2
+  newName: karstensiemer/bmmi-pr
+  newTag: 0259c89a5e9a6fae851c662205ca10385fb149e2

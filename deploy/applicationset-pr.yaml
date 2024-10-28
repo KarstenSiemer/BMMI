@@ -19,6 +19,8 @@ spec:
   template:
     metadata:
       name: 'bmmi-pr-{{.number}}'
+      annotations:
+        link.argocd.argoproj.io/external-link: http://bmmi-pr-{{.number}}.dev.127.0.0.1.nip.io:7080
     spec:
       project: 'dev'
       source:
@@ -41,21 +43,33 @@ spec:
                   path: "/spec/template/spec/containers/0/env/-"
                   value:
                     name: WEB_ALIAS_DOMAIN
-                    value: bmmi.pr-{{.number}}.127.0.0.1.nip.io
+                    value: bmmi-pr-{{.number}}.dev.127.0.0.1.nip.io
             - target:
                 kind: Ingress
                 name: bmmi
               patch: |-
                 - op: replace
                   path: /spec/rules/0/host
-                  value: bmmi.pr-{{.number}}.127.0.0.1.nip.io
+                  value: bmmi-pr-{{.number}}.dev.127.0.0.1.nip.io
       destination:
         name: dev
         namespace: bmmi-pr-{{.number}}
+      info:
+        - name: 'PR'
+          value: '{{.number}}'
+        - name: 'Labels'
+          value: '{{.labels}}'
       syncPolicy:
+        managedNamespaceMetadata:
+          labels:
+            argocd.argoproj.io/instance:: 'bmmi-pr-{{.number}}'
+          annotations:
+            argocd.argoproj.io/tracking-id: >-
+              'bmmi-pr-{{.number}}:app/Namespace:bmmi-pr-{{.number}}/bmmi-pr-{{.number}}
         automated:
           prune: true
           selfHeal: true
+          allowEmpty: true
         syncOptions:
           - CreateNamespace=true
           - ApplyOutOfSyncOnly=true

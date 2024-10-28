@@ -1,3 +1,11 @@
+## [1.7.1](https://github.com/KarstenSiemer/BMMI/compare/v1.7.0...v1.7.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.1 ([0cb997e](https://github.com/KarstenSiemer/BMMI/commit/0cb997ee3828bdbf805bb8fa733ea4ce9393c48e))
+* **metadata:** app metadata ([#15](https://github.com/KarstenSiemer/BMMI/issues/15)) ([2d05186](https://github.com/KarstenSiemer/BMMI/commit/2d0518671881d12b11d1c65022e42c18e303a627))
+
 # [1.7.0](https://github.com/KarstenSiemer/BMMI/compare/v1.6.3...v1.7.0) (2024-10-28)
 
 

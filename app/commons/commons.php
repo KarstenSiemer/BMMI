@@ -14,6 +14,8 @@
  * @since    1.5.0
  */
 
+declare(strict_types=1);
+
 /**
  * Check if PHP is functional.
  *
@@ -89,6 +91,46 @@ function openConnection(): mysqli
     // should be removed in a real world scenario
     $conn->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
     return $conn;
+}
+
+/**
+ * For querying database connection
+ *
+ * Utilizes a prepared statement to query the database
+ *
+ * @param mysqli            $conn   database connection
+ * @param string            $sql    SQL Query without params
+ * @param array<string|int> $params parameters for prepared statements
+ * @param string            $types  the types for expanding params
+ *                                  s<string>,d<double>,i<int>,b<blob>
+ *
+ * @return mysqli_stmt
+ * @since  0.0.0
+ */
+function queryConnection(
+    mysqli $conn,
+    string $sql,
+    array $params = [],
+    string $types = ""
+): mysqli_stmt {
+    if (!($stmt = $conn->prepare($sql))) {
+        throw new RuntimeException($conn->errno . ' ' . $conn->error);
+    }
+
+    if (!empty($params)) {
+        $types = $types ?: str_repeat("s", count($params));
+        $stmt->bind_param($types, ...$params);
+
+        if (($pos = strpos($types, "b")) !== false) {
+            $stmt->send_long_data(
+                $pos,
+                (string)file_get_contents((string)$params[$pos])
+            );
+        }
+    }
+
+    $stmt->execute();
+    return $stmt;
 }
 
 /**

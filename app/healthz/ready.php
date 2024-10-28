@@ -14,6 +14,8 @@
  * @since    1.5.0
  */
 
+declare(strict_types=1);
+
 // Include the database connection functions
 require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
 
@@ -80,6 +82,5 @@ function readinessCheck(): void
     }
 }
 
-// Execute readiness check
 readinessCheck();
 ?>

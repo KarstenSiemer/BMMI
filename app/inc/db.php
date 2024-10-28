@@ -13,52 +13,10 @@
  * @since    0.0.0
  */
 
- // Include the database connection functions
- require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
+declare(strict_types=1);
 
-/**
- * For querying database connection
- *
- * Utilizes a prepared statement to query the database
- *
- * @param mysqli            $conn   database connection
- * @param string            $sql    SQL Query without params
- * @param array<string|int> $params parameters for prepared statements
- * @param string            $types  the types for expanding params
- *                                  s<string>,d<double>,i<int>,b<blob>
- *
- * @return mysqli_stmt
- * @since  0.0.0
- */
-function queryConnection(
-    mysqli $conn,
-    string $sql,
-    array  $params,
-    string $types = ""
-): mysqli_stmt {
-    $types = $types ?: str_repeat("s", count($params));
-    if ($stmt = $conn->prepare($sql)) {
-        $pos = strpos($types, "b");
-        if ($pos) {
-            // Blobs need to be sent to the database before the query gets executed
-            // Thus forcing this branch
-            // Usually we'd need to do a lot more error handling, but
-            // I will just shamelessly cast to string out of pure laziness
-            $tmp_name = (string)$params[$pos];
-            $params[$pos] = null;
-            $stmt->bind_param($types, ...$params);
-            $stmt->send_long_data($pos, (string)file_get_contents($tmp_name));
-        } else {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-    } else {
-        throw new RuntimeException(
-            $conn->errno . ' ' . $conn->error
-        );
-    }
-    return $stmt;
-}
+// Include the database connection functions
+require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
 
 /**
  * For uploading a video into the database
@@ -227,7 +185,7 @@ function gather(): array
  * @return array<string>
  * @since  0.0.0
  */
-function delete(string $videoId): array
+function prune(string $videoId): array
 {
     $errors = [];
     if (empty($videoId)) {
@@ -361,7 +319,7 @@ if ($_POST['gather']) {
 }
 
 if ($_POST['delete']) {
-    $errors = array_merge($errors, delete($_POST['videoId']));
+    $errors = array_merge($errors, prune($_POST['videoId']));
 }
 
 if (!empty($errors)) {

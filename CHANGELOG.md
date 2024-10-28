@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/KarstenSiemer/BMMI/compare/v1.6.3...v1.7.0) (2024-10-28)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.0 ([cd3f0c4](https://github.com/KarstenSiemer/BMMI/commit/cd3f0c45e326122568e5e0b6e68352fe794fea23))
+
+
+### Features
+
+* **probes:** add startup probe ([#14](https://github.com/KarstenSiemer/BMMI/issues/14)) ([fcdd75d](https://github.com/KarstenSiemer/BMMI/commit/fcdd75dd2b52c328c6ce2e079bb3d70401aa61f4))
+
 ## [1.6.3](https://github.com/KarstenSiemer/BMMI/compare/v1.6.2...v1.6.3) (2024-10-27)
 
 

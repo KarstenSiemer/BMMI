@@ -44,6 +44,8 @@ function ensureVideosTable(): void
         throw new RuntimeException("Error ensuring 'videos' table", 0, $e);
     } finally {
         closeConnection($conn);
+        http_response_code(200);
+        header('Content-Type: application/json');
         echo json_encode(
             [
             'status' => $table_exists ? 'ready' : 'not ready',

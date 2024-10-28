@@ -14,6 +14,8 @@
  * @since    1.5.0
  */
 
+declare(strict_types=1);
+
 // Include the database connection functions
 require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
 
@@ -45,7 +47,7 @@ function livenessCheck(): void
             ]
         );
     } else {
-        http_response_code(503); // Service Unavailable
+        http_response_code(503);
         header('Content-Type: application/json');
         echo json_encode(
             [
@@ -56,6 +58,5 @@ function livenessCheck(): void
     }
 }
 
-// Execute liveness check
 livenessCheck();
 ?>

@@ -62,7 +62,7 @@ spec:
       syncPolicy:
         managedNamespaceMetadata:
           labels:
-            argocd.argoproj.io/instance:: 'bmmi-pr-{{.number}}'
+            argocd.argoproj.io/instance: 'bmmi-pr-{{.number}}'
           annotations:
             argocd.argoproj.io/tracking-id: >-
               'bmmi-pr-{{.number}}:app/Namespace:bmmi-pr-{{.number}}/bmmi-pr-{{.number}}

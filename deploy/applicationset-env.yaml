@@ -14,7 +14,7 @@ spec:
     metadata:
       name: 'bmmi-{{.name}}'
       annotations:
-        link.argocd.argoproj.io/external-link: http://bmmi.{{.name}}.127.0.0.1.nip.io:{{index .metadata.annotations "http"}}
+        link.argocd.argoproj.io/external-link: http://bmmi.{{.name}}.127.0.0.1.nip.io:{{index .metadata.labels "http"}}
     spec:
       project: '{{.name}}'
       source:

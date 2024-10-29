@@ -3,3 +3,6 @@ kind: Kustomization
 resources:
   - service.yaml
   - statefulset.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-wave: '0'

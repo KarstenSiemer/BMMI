@@ -1,3 +1,11 @@
+## [1.7.2](https://github.com/KarstenSiemer/BMMI/compare/v1.7.1...v1.7.2) (2024-10-29)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.2 ([d208e66](https://github.com/KarstenSiemer/BMMI/commit/d208e663c164c7e9eb6e6f5fb9998d0c25fd1dfc))
+* **kustomize:** argocd pr app ns label ([e57738b](https://github.com/KarstenSiemer/BMMI/commit/e57738b2af61ccd00616e008883f37cf7b27c9dc))
+
 ## [1.7.1](https://github.com/KarstenSiemer/BMMI/compare/v1.7.0...v1.7.1) (2024-10-28)
 
 

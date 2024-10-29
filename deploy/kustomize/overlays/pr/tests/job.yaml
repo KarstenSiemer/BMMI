@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: hello-world
-          image: busybox:1.37
+          image: alpine/curl:8.9.1
           imagePullPolicy: Always
           command: ['echo', 'Hello, World!!']
           resources:

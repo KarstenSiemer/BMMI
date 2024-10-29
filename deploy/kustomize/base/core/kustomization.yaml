@@ -9,5 +9,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-wave: '1'
 
 images:
-  - name: karstensiemer/bmmi
-    newTag: 1.7.1
+- name: karstensiemer/bmmi
+  newTag: 1.7.2

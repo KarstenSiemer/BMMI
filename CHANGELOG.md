@@ -1,3 +1,11 @@
+## [1.7.3](https://github.com/KarstenSiemer/BMMI/compare/v1.7.2...v1.7.3) (2024-10-29)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.3 ([972ba7b](https://github.com/KarstenSiemer/BMMI/commit/972ba7be6ac2b601ca468c2b4268d7d8534ad5ce))
+* **kustomize:** argocd sync waves ([#16](https://github.com/KarstenSiemer/BMMI/issues/16)) ([81324b3](https://github.com/KarstenSiemer/BMMI/commit/81324b35615d74d707e20b3ba8e8ddbf728e8348))
+
 ## [1.7.2](https://github.com/KarstenSiemer/BMMI/compare/v1.7.1...v1.7.2) (2024-10-29)
 
 

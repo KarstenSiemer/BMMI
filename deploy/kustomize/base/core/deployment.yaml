@@ -27,6 +27,8 @@ spec:
             - containerPort: 443
               name: https
           env:
+            - name: WEB_ALIAS_DOMAIN
+              value: 'bmmi.prod.127.0.0.1.nip.io'
             - name: WEB_DOCUMENT_INDEX
               value: 'index.html'
             - name: DATABASE

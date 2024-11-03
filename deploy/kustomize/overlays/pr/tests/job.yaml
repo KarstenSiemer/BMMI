@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hello-world-job
+  name: test-curl
   annotations:
     kube-score/ignore: pod-networkpolicy,container-ephemeral-storage-request-and-limit,container-security-context-readonlyrootfilesystem,container-security-context-user-group-id,container-security-context-privileged,container-security-context-readonlyrootfilesystem
 spec:
@@ -9,9 +9,14 @@ spec:
     spec:
       containers:
         - name: hello-world
-          image: busybox:1.37
+          image: alpine/curl:8.9.1
           imagePullPolicy: Always
-          command: ['echo', 'Hello, World!!']
+          command: ['curl', '$WEB_ALIAS_DOMAIN:$WEB_ALIAS_PORT']
+          env:
+            - name: WEB_ALIAS_DOMAIN
+              value: 'bmmi.prod.127.0.0.1.nip.io'
+            - name: WEB_ALIAS_PORT
+              value: '7080'
           resources:
             requests:
               memory: '128Mi'

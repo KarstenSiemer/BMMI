@@ -39,7 +39,15 @@ spec:
                 kind: Deployment
                 name: bmmi
               patch: |-
-                - op: add
+                - op: replace
+                  path: "/spec/template/spec/containers/0/env/-"
+                  value:
+                    name: WEB_ALIAS_DOMAIN
+                    value: bmmi-pr-{{.number}}.dev.127.0.0.1.nip.io
+            - target:
+                kind: Job
+              patch: |-
+                - op: replace
                   path: "/spec/template/spec/containers/0/env/-"
                   value:
                     name: WEB_ALIAS_DOMAIN

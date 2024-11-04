@@ -1,17 +1,25 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hello-world-job
+  name: test-curl
   annotations:
     kube-score/ignore: pod-networkpolicy,container-ephemeral-storage-request-and-limit,container-security-context-readonlyrootfilesystem,container-security-context-user-group-id,container-security-context-privileged,container-security-context-readonlyrootfilesystem
 spec:
   template:
     spec:
       containers:
-        - name: hello-world
-          image: busybox:1.37
+        - name: curl
+          image: alpine/curl:8.9.1
           imagePullPolicy: Always
-          command: ['echo', 'Hello, World!!']
+          command:
+            - /bin/sh
+            - '-c'
+            - 'curl -v "http://$WEB_TARGET:$WEB_PORT"'
+          env:
+            - name: WEB_TARGET
+              value: 'bmmi-web-pr-0'
+            - name: WEB_PORT
+              value: '80'
           resources:
             requests:
               memory: '128Mi'

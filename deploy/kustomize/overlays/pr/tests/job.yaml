@@ -8,10 +8,18 @@ spec:
   template:
     spec:
       containers:
-        - name: hello-world
+        - name: curl
           image: alpine/curl:8.9.1
           imagePullPolicy: Always
-          command: ['curl', '-v', 'https://google.de']
+          command:
+            - /bin/sh
+            - '-c'
+            - 'curl -v "http://$WEB_TARGET:$WEB_PORT"'
+          env:
+            - name: WEB_TARGET
+              value: 'bmmi-web-pr-0'
+            - name: WEB_PORT
+              value: '80'
           resources:
             requests:
               memory: '128Mi'

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: bmmi-web
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 80
       name: http

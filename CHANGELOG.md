@@ -1,3 +1,11 @@
+## [1.7.4](https://github.com/KarstenSiemer/BMMI/compare/v1.7.3...v1.7.4) (2024-11-04)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.4 ([57ced58](https://github.com/KarstenSiemer/BMMI/commit/57ced580fbc750de47bf406ac676ca5da2db9b15))
+* **kustomize:** test curl ([#19](https://github.com/KarstenSiemer/BMMI/issues/19)) ([80e043c](https://github.com/KarstenSiemer/BMMI/commit/80e043ce16446823c031e85f11f475f15f713147))
+
 ## [1.7.3](https://github.com/KarstenSiemer/BMMI/compare/v1.7.2...v1.7.3) (2024-10-29)
 
 

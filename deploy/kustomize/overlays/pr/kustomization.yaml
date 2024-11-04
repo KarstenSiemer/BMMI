@@ -1,37 +1,37 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base/
-  - tests
+- ../../base/
+- tests
 
 replacements:
-  - source:
-      kind: Service
-      name: bmmi-db
-    targets:
-      - fieldPaths:
-          - spec.template.spec.containers.[name=php-apache].env.[name=DATABASE_HOST].value
-        select:
-          kind: Deployment
-          name: bmmi-web
-  - source:
-      kind: Service
+- source:
+    kind: Service
+    name: bmmi-db
+  targets:
+  - fieldPaths:
+    - spec.template.spec.containers.[name=php-apache].env.[name=DATABASE_HOST].value
+    select:
+      kind: Deployment
       name: bmmi-web
-    targets:
-      - fieldPaths:
-          - spec.template.spec.containers.[name=curl].env.[name=WEB_TARGET].value
-        select:
-          kind: Job
-  - source:
-      kind: Service
-      name: bmmi-web
-      fieldPath: spec.ports.[name=http].port
-    targets:
-      - fieldPaths:
-          - spec.template.spec.containers.[name=curl].env.[name=WEB_PORT].value
-        select:
-          kind: Job
+- source:
+    kind: Service
+    name: bmmi-web
+  targets:
+  - fieldPaths:
+    - spec.template.spec.containers.[name=curl].env.[name=WEB_TARGET].value
+    select:
+      kind: Job
+- source:
+    fieldPath: spec.ports.[name=http].port
+    kind: Service
+    name: bmmi-web
+  targets:
+  - fieldPaths:
+    - spec.template.spec.containers.[name=curl].env.[name=WEB_PORT].value
+    select:
+      kind: Job
 
 images:
-  - name: karstensiemer/bmmi
-    newTag: 1.7.3
+- name: karstensiemer/bmmi
+  newTag: 1.7.4

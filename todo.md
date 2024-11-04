@@ -1,6 +1,5 @@
 # TODOs
 
-- argo notifications
 - phpunit
 - job tests
 - merge queue

@@ -3,11 +3,11 @@
   "extends": [
     "config:recommended",
     ":semanticCommits",
-    "group:monorepos",
     ":prImmediately",
     ":prConcurrentLimitNone",
     ":prHourlyLimitNone"
   ],
+  "schedule": ["at any time"],
   "dependencyDashboard": true,
   "automerge": false,
   "automergeType": "pr",
@@ -19,22 +19,27 @@
     }
   },
   "kustomize": {
-    "fileMatch": ["^deploy/kustomize(.*/).+\\.ya?ml$"]
+    "fileMatch": ["^deploy/.+\\.ya?ml$"]
   },
   "prCreation": "immediate",
   "rebaseWhen": "conflicted",
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": false
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
     },
     {
-      "matchDepTypes": ["devDependencies"],
-      "automerge": false
-    },
-    {
-      "matchCategories": ["kubernetes"],
-      "semanticCommitType": "fix"
+      "matchFileNames": ["^app/.+$"],
+      "major": {
+        "semanticCommitType": "breaking"
+      },
+      "minor": {
+        "semanticCommitType": "feat"
+      },
+      "patch": {
+        "semanticCommitType": "fix"
+      }
     }
   ]
 }

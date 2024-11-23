@@ -1,3 +1,12 @@
+## [1.7.7](https://github.com/KarstenSiemer/BMMI/compare/v1.7.6...v1.7.7) (2024-11-23)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.7 ([074c037](https://github.com/KarstenSiemer/BMMI/commit/074c0374d1f8011d10a9687785278eb8cef3a8a2))
+* **deps:** update dependency karstensiemer/bmmi to v1.7.6 ([#25](https://github.com/KarstenSiemer/BMMI/issues/25)) ([c6ffa1b](https://github.com/KarstenSiemer/BMMI/commit/c6ffa1bec67d815fb5a1611c3db06e9a0cbb8068))
+* **deps:** update mariadb docker tag to v11 ([#28](https://github.com/KarstenSiemer/BMMI/issues/28)) ([89099f3](https://github.com/KarstenSiemer/BMMI/commit/89099f37e3519230627937ea6333d802f3211ccd))
+
 ## [1.7.6](https://github.com/KarstenSiemer/BMMI/compare/v1.7.5...v1.7.6) (2024-11-23)
 
 

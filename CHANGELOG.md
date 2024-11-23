@@ -1,3 +1,11 @@
+## [1.7.5](https://github.com/KarstenSiemer/BMMI/compare/v1.7.4...v1.7.5) (2024-11-23)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.5 ([a97dab3](https://github.com/KarstenSiemer/BMMI/commit/a97dab35e6cc6ebb5553a30c13f9dd1fc3386865))
+* **phpstan:** update sat and fix mixed handling ([#23](https://github.com/KarstenSiemer/BMMI/issues/23)) ([3ef5a1f](https://github.com/KarstenSiemer/BMMI/commit/3ef5a1f80fb4a1d00c5e5bfa71832ecf8ae855fb))
+
 ## [1.7.4](https://github.com/KarstenSiemer/BMMI/compare/v1.7.3...v1.7.4) (2024-11-04)
 
 

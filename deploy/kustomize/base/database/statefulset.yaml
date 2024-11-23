@@ -63,7 +63,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - mysqladmin status -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
+                - mariadb-admin status -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
             timeoutSeconds: 3
             successThreshold: 3
           livenessProbe:
@@ -71,7 +71,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - mysqladmin ping -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
+                - mariadb-admin ping -u ${MARIADB_USER} -p${MARIADB_PASSWORD}
             initialDelaySeconds: 30
             timeoutSeconds: 3
       volumes:

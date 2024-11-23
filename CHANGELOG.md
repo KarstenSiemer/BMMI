@@ -1,3 +1,12 @@
+## [1.7.8](https://github.com/KarstenSiemer/BMMI/compare/v1.7.7...v1.7.8) (2024-11-23)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.8 ([8ccc190](https://github.com/KarstenSiemer/BMMI/commit/8ccc190bef33a2bedbfff4cc584442bd86113fb8))
+* **mariadb:** probes to mariadb-admin ([73ca77f](https://github.com/KarstenSiemer/BMMI/commit/73ca77fa5e6abf4c0e657beed94f15a2c56a9d26))
+* **renovate:** deactivate automerge ([8e03a91](https://github.com/KarstenSiemer/BMMI/commit/8e03a91f202058bf2df9d711686fa4ff0d84c07f))
+
 ## [1.7.7](https://github.com/KarstenSiemer/BMMI/compare/v1.7.6...v1.7.7) (2024-11-23)
 
 

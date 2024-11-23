@@ -1,6 +1,40 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    ":semanticCommits",
+    "group:monorepos",
+    ":prImmediately",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone"
+  ],
+  "dependencyDashboard": true,
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "rebase",
+  "kubernetes": {
+    "fileMatch": ["^deploy/kustomize(.*/).+\\.ya?ml$"],
+    "digest": {
+      "enabled": true
+    }
+  },
+  "kustomize": {
+    "fileMatch": ["^deploy/kustomize(.*/).+\\.ya?ml$"]
+  },
+  "prCreation": "immediate",
+  "rebaseWhen": "conflicted",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    },
+    {
+      "matchCategories": ["kubernetes"],
+      "semanticCommitType": "fix"
+    }
   ]
 }

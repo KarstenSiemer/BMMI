@@ -48,7 +48,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: karstensiemer/bmmi:${{ steps.semantic-dry.outputs.new_release_version }}
-      - uses: yokawasa/action-setup-kube-tools@v0.11.1
+      - uses: yokawasa/action-setup-kube-tools@v0.11.2
         if: steps.semantic-dry.outputs.new_release_published == 'true'
         with:
           kustomize: '5.5.0'

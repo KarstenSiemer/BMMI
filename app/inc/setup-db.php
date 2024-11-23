@@ -15,8 +15,11 @@
 
 declare(strict_types=1);
 
-// Include the database connection functions
-require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
+$filePath = realpath(__DIR__ . '/../commons/commons.php');
+if ($filePath === false) {
+    throw new RuntimeException('Invalid file path.');
+}
+require_once $filePath;
 
 /**
  * Ensures the 'videos' table is present with the correct schema
@@ -129,8 +132,6 @@ function tableExists(mysqli $conn, string $tableName): bool
     return $result && $result->num_rows > 0;
 }
 
-
-
 /**
  * Generates the SQL definition for a column
  *
@@ -146,7 +147,12 @@ function tableExists(mysqli $conn, string $tableName): bool
  */
 function columnDefinitionSQL(string $columnName, array $definition): string
 {
-    $sql = "`$columnName` " . $definition['type'];
+    if (!is_string($definition['type'])) {
+        throw new InvalidArgumentException(
+            "The 'type' value in the definition must be a string."
+        );
+    }
+    $sql = "`" . $columnName . "` " . $definition['type'];
     if (!empty($definition['unsigned'])) {
         $sql .= " UNSIGNED";
     }

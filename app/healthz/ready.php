@@ -16,8 +16,11 @@
 
 declare(strict_types=1);
 
-// Include the database connection functions
-require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
+$filePath = realpath(__DIR__ . '/../commons/commons.php');
+if ($filePath === false) {
+    throw new RuntimeException('Invalid file path.');
+}
+require_once $filePath;
 
 /**
  * Check if the database is reachable and has available connections.

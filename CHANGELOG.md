@@ -1,3 +1,11 @@
+## [1.7.9](https://github.com/KarstenSiemer/BMMI/compare/v1.7.8...v1.7.9) (2024-11-23)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.9 ([b345bf9](https://github.com/KarstenSiemer/BMMI/commit/b345bf9ced1926bd5f943fb3f412d15c1fa3b7ce))
+* **deps:** update dependency karstensiemer/bmmi to v1.7.8 ([#30](https://github.com/KarstenSiemer/BMMI/issues/30)) ([3cfca89](https://github.com/KarstenSiemer/BMMI/commit/3cfca899723866121f23be185f17a698110dac26))
+
 ## [1.7.8](https://github.com/KarstenSiemer/BMMI/compare/v1.7.7...v1.7.8) (2024-11-23)
 
 

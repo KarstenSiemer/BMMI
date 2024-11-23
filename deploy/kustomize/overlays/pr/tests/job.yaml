@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: curl
-          image: alpine/curl:8.9.1
+          image: alpine/curl:8.10.0
           imagePullPolicy: Always
           command:
             - /bin/sh

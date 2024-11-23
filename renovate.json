@@ -9,7 +9,7 @@
     ":prHourlyLimitNone"
   ],
   "dependencyDashboard": true,
-  "automerge": true,
+  "automerge": false,
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
@@ -26,11 +26,11 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
+      "automerge": false
     },
     {
       "matchDepTypes": ["devDependencies"],
-      "automerge": true
+      "automerge": false
     },
     {
       "matchCategories": ["kubernetes"],

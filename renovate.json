@@ -8,18 +8,16 @@
     ":prHourlyLimitNone"
   ],
   "schedule": ["at any time"],
+  "ignorePaths": [],
   "dependencyDashboard": true,
   "automerge": false,
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
-    "fileMatch": ["^deploy/kustomize(.*/).+\\.ya?ml$"],
-    "digest": {
-      "enabled": true
-    }
+    "fileMatch": ["^deploy/.+\\.ya?ml$"]
   },
   "kustomize": {
-    "fileMatch": ["^deploy/.+\\.ya?ml$"]
+    "fileMatch": ["(^|/)kustomization\\.ya?ml$"]
   },
   "prCreation": "immediate",
   "rebaseWhen": "conflicted",
@@ -27,7 +25,7 @@
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
-      "automerge": true
+      "automerge": false
     },
     {
       "matchFileNames": ["^app/.+$"],

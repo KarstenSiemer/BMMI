@@ -14,7 +14,7 @@
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
-    "fileMatch": ["^deploy/.+\\.ya?ml$"]
+    "fileMatch": ["^deploy/kustomize/.+\\.ya?ml$"]
   },
   "kustomize": {
     "fileMatch": ["(^|/)kustomization\\.ya?ml$"]

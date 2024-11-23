@@ -15,8 +15,11 @@
 
 declare(strict_types=1);
 
-// Include the database connection functions
-require_once $_SERVER['DOCUMENT_ROOT'] . '/commons/commons.php';
+$filePath = realpath(__DIR__ . '/../commons/commons.php');
+if ($filePath === false) {
+    throw new RuntimeException('Invalid file path.');
+}
+require_once $filePath;
 
 /**
  * For uploading a video into the database
@@ -28,25 +31,74 @@ function upload(): array
 {
     // Usually you would do a lot of error checking here for
     // e.g sting length or file size/type etc.
+    // create external function in future
     $errors = [];
-    if ($_FILES['file']['error'] != 0) {
-        $errors[] = 'Video upload failed.';
+    if (isset($_FILES['file'])
+        && is_array($_FILES['file'])
+        && $_FILES['file']['error'] != 0
+    ) {
+          $errors[] = 'Video upload failed.';
     }
-    if (empty($_FILES['video'])) {
+    if (empty($_FILES['video'])
+        || !is_array($_FILES['video'])
+        || !isset($_FILES['video']['name'])
+        || !is_string($_FILES['video']['name'])
+        || !isset($_FILES['video']['type'])
+        || !is_string($_FILES['video']['type'])
+        || !isset($_FILES['video']['size'])
+        || !is_int($_FILES['video']['size'])
+        || !isset($_FILES['video']['tmp_name'])
+        || !is_string($_FILES['video']['tmp_name'])
+    ) {
         $errors[] = 'No Video attached.';
     }
-    if (empty($_POST['title'])) {
-        $errors[] = 'Video Title cannot be determined.';
+    if (empty($_POST['title'])
+        || !is_string($_POST['title'])
+        || trim($_POST['title']) === ''
+    ) {
+          $errors[] = 'Video Title cannot be determined.';
     }
-    if (empty($_POST['duration'])) {
-        $errors[] = 'Video Duration cannot be determined.';
+    if (empty($_POST['duration'])
+        || !is_string($_POST['duration'])
+        || trim($_POST['duration']) === ''
+    ) {
+          $errors[] = 'Video Duration cannot be determined.';
     }
-    if (empty($_POST['actors'])) {
-        $errors[] = 'Video Actors cannot be determined.';
+    if (empty($_POST['actors'])
+        || !is_string($_POST['actors'])
+        || trim($_POST['actors']) === ''
+    ) {
+          $errors[] = 'Video Actors cannot be determined.';
     }
 
+    // soft error for UI.
     if (!empty($errors)) {
         return $errors;
+    }
+
+    // make compiler happy. It doesnt recognize the soft error
+    // maybe rather use exception instead of custom error handling...
+    if (empty($_FILES['video'])
+        || !is_array($_FILES['video'])
+        || !isset($_FILES['video']['name'])
+        || !is_string($_FILES['video']['name'])
+        || !isset($_FILES['video']['type'])
+        || !is_string($_FILES['video']['type'])
+        || !isset($_FILES['video']['size'])
+        || !is_int($_FILES['video']['size'])
+        || !isset($_FILES['video']['tmp_name'])
+        || !is_string($_FILES['video']['tmp_name'])
+        || empty($_POST['title'])
+        || !is_string($_POST['title'])
+        || trim($_POST['title']) === ''
+        || empty($_POST['duration'])
+        || !is_string($_POST['duration'])
+        || trim($_POST['duration']) === ''
+        || empty($_POST['actors'])
+        || !is_string($_POST['actors'])
+        || trim($_POST['actors']) === ''
+    ) {
+        throw new InvalidArgumentException('No Video attached on upload.');
     }
 
     $conn = openConnection();
@@ -66,13 +118,13 @@ function upload(): array
         $conn,
         $sql,
         [
-            $_POST['title'],
-            $_FILES['video']['name'],
-            $_POST['actors'],
-            $_FILES['video']['type'],
-            $_POST['duration'],
-            $_FILES['video']['size'],
-            $_FILES['video']['tmp_name']
+          $_POST['title'],
+          $_FILES['video']['name'],
+          $_POST['actors'],
+          $_FILES['video']['type'],
+          $_POST['duration'],
+          $_FILES['video']['size'],
+          $_FILES['video']['tmp_name']
         ],
         "ssssiib"
     );
@@ -143,7 +195,7 @@ function stream(int $videoId): array
 /**
  * For returning video metadata
  *
- * @return array<string, array<string>>
+ * @return array<string, array<string|mixed>>
  * @since  0.0.0
  */
 function gather(): array
@@ -180,12 +232,12 @@ function gather(): array
 /**
  * For deleting a Video
  *
- * @param string $videoId The id of the Video to delete
+ * @param int $videoId The id of the Video to delete
  *
  * @return array<string>
  * @since  0.0.0
  */
-function prune(string $videoId): array
+function prune(int $videoId): array
 {
     $errors = [];
     if (empty($videoId)) {
@@ -202,7 +254,7 @@ function prune(string $videoId): array
     queryConnection(
         $conn,
         $sql,
-        [(int)$videoId],
+        [$videoId],
         "i"
     );
     closeConnection($conn);
@@ -224,25 +276,43 @@ function edit(): array
     $sets = [];
     $payload = [];
 
-    if (!empty($_POST['title'])) {
+    if (!empty($_POST['title']) && is_string($_POST['title'])) {
         $types .= "s";
         $sets[] = 'title =?';
         $payload[] = $_POST['title'];
     }
-    if (!empty($_POST['actors'])) {
+    if (!empty($_POST['actors']) && is_string($_POST['actors'])) {
         $types .= "s";
         $sets[] = 'actors =?';
         $payload[] = $_POST['actors'];
     }
-    if (!empty($_POST['duration'])) {
+    if (!empty($_POST['duration']) && is_int($_POST['duration'])) {
         $types .= "i";
         $sets[] = 'duration =?';
         $payload[] = (int)$_POST['duration'];
     }
     if (!empty($_FILES['video'])) {
-        if ($_FILES['file']['error'] != 0) {
-            $errors[] = 'Video upload failed.';
-            return $errors;
+        if (isset($_FILES['file'])
+            && is_array($_FILES['file'])
+            && $_FILES['file']['error'] != 0
+        ) {
+              $errors[] = 'Video upload failed.';
+              return $errors;
+        }
+        if (empty($_FILES['video'])
+            || !is_array($_FILES['video'])
+            || !isset($_FILES['video']['name'])
+            || !is_string($_FILES['video']['name'])
+            || !isset($_FILES['video']['type'])
+            || !is_string($_FILES['video']['type'])
+            || !isset($_FILES['video']['size'])
+            || !is_int($_FILES['video']['size'])
+            || !isset($_FILES['video']['tmp_name'])
+            || !is_string($_FILES['video']['tmp_name'])
+        ) {
+            throw new InvalidArgumentException(
+                'No Video attached on upload.'
+            );
         }
         $types .= "ssib";
         $sets[] = 'filename =?';
@@ -255,13 +325,13 @@ function edit(): array
         $payload[] = $_FILES['video']['tmp_name'];
     }
 
-    if (empty($_POST['videoId'])) {
+    if (isset($_POST['videoId']) && is_string($_POST['videoId'])) {
+        $types .= "i";
+        $payload[] = $_POST['videoId'];
+    } else {
         $errors[] = 'No videoId in payload.';
         return $errors;
     }
-
-    $types .= "i";
-    $payload[] = $_POST['videoId'];
 
     if (empty($sets)) {
         $errors[] = 'No data received.';
@@ -311,7 +381,11 @@ if ($_POST['edit']) {
 }
 
 if ($_POST['stream']) {
-    $errors = stream((int)$_POST['videoId']);
+    if (isset($_POST['videoId']) && is_string($_POST['videoId'])) {
+        $errors = stream((int)$_POST['videoId']);
+    } else {
+        $errors['stream'] = 'No videoId in payload.';
+    }
 }
 
 if ($_POST['gather']) {
@@ -319,7 +393,11 @@ if ($_POST['gather']) {
 }
 
 if ($_POST['delete']) {
-    $errors = array_merge($errors, prune($_POST['videoId']));
+    if (isset($_POST['videoId']) && is_string($_POST['videoId'])) {
+        $errors = array_merge($errors, prune((int)$_POST['videoId']));
+    } else {
+        $errors['delete'] = 'No videoId in payload.';
+    }
 }
 
 if (!empty($errors)) {

@@ -1,3 +1,11 @@
+## [1.7.6](https://github.com/KarstenSiemer/BMMI/compare/v1.7.5...v1.7.6) (2024-11-23)
+
+
+### Bug Fixes
+
+* **core:** set bmmi release image to 1.7.6 ([49c07b5](https://github.com/KarstenSiemer/BMMI/commit/49c07b5e3e9c356112ea4089d1f152b693e29916))
+* **renovate:** config ([5ab3cbb](https://github.com/KarstenSiemer/BMMI/commit/5ab3cbbb634dba36581d384d9fb5e3bb6594d8eb))
+
 ## [1.7.5](https://github.com/KarstenSiemer/BMMI/compare/v1.7.4...v1.7.5) (2024-11-23)
 
 

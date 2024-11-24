@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
+    "config:best-practices",
     ":semanticCommits",
     ":prImmediately",
     ":prConcurrentLimitNone",
@@ -10,7 +10,6 @@
   "schedule": ["at any time"],
   "ignorePaths": [],
   "dependencyDashboard": true,
-  "automerge": false,
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
@@ -25,19 +24,8 @@
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
-      "automerge": false
-    },
-    {
-      "matchFileNames": ["^app/.+$"],
-      "major": {
-        "semanticCommitType": "breaking"
-      },
-      "minor": {
-        "semanticCommitType": "feat"
-      },
-      "patch": {
-        "semanticCommitType": "fix"
-      }
+      "automerge": true,
+      "minimumReleaseAge": "45 minutes"
     }
   ]
 }

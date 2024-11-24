@@ -2,7 +2,7 @@ version: '3.9'
 services:
   web:
     container_name: bmmi-web
-    image: webdevops/php-apache:8.3
+    image: webdevops/php-apache:8.3@sha256:13b7ca75dbb91274c08f913812d4912ea2d8f42461c35221f09f2e4dbe9c2616
     restart: unless-stopped
     ports:
       - 4443:443
@@ -23,7 +23,7 @@ services:
       - 'db:database'
   db:
     container_name: bmmi-db
-    image: mariadb:11.6.2
+    image: mariadb:11.6.2@sha256:0a620383fe05d20b3cc7510ebccc6749f83f1b0f97f3030d10dd2fa199371f07
     command: '--default-authentication-plugin=mysql_native_password'
     restart: unless-stopped
     ports:

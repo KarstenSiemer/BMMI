@@ -21,30 +21,30 @@ jobs:
       - uses: snnaplab/get-labels-action@v1
       - name: Checkout
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           ref: ${{ github.head_ref }}
       - name: Set up QEMU
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3
       - name: Set up Docker Buildx
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3
       - name: Login to Docker Hub
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6
         with:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
           tags: karstensiemer/bmmi-pr:${{ github.sha }}
-      - uses: yokawasa/action-setup-kube-tools@v0.11.2
+      - uses: yokawasa/action-setup-kube-tools@9e25a4277af127b60011c95b6ed2da7e3b3613b1 # v0.11.2
         if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
           kustomize: '5.5.0'
@@ -53,13 +53,13 @@ jobs:
         run: |
           cd deploy/kustomize/overlays/pr
           kustomize edit set image karstensiemer/bmmi=karstensiemer/bmmi-pr:${{ github.sha }}
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
         if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
           commit_message: 'fix(pr): set pr overlay image to karstensiemer/bmmi-pr:${{ github.sha }}'
           commit_options: '--no-verify --signoff'
           add_options: '-u'
-      - uses: actions/labeler@v5
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5
         if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
           sync-labels: true

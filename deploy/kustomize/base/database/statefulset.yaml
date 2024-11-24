@@ -21,7 +21,7 @@ spec:
       containers:
         - name: mariadb
           args: ['--default-authentication-plugin=mysql_native_password']
-          image: mariadb:11.6.2
+          image: mariadb:11.6.2@sha256:0a620383fe05d20b3cc7510ebccc6749f83f1b0f97f3030d10dd2fa199371f07
           imagePullPolicy: Always
           ports:
             - containerPort: 3306

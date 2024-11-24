@@ -12,7 +12,8 @@ on:
 
 permissions:
   contents: write
-  pull-requests: read
+  pull-requests: write
+  issues: write
 
 jobs:
   docker:
@@ -59,7 +60,8 @@ jobs:
           commit_message: 'chore(pr): set pr overlay image to karstensiemer/bmmi-pr:${{ github.sha }}'
           commit_options: '--no-verify --signoff'
           add_options: '-u'
-      - uses: actions/labeler@v5
+      - uses: actions-ecosystem/action-add-labels@v1
         if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
-          sync-labels: true
+          labels: |
+            deploy

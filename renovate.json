@@ -25,8 +25,15 @@
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
-      "automerge": true,
-      "minimumReleaseAge": "45 minutes"
+      "automerge": false
+    },
+    {
+      "matchPaths": ["deploy/kustomize/overlays/prod/kustomization.yaml"],
+      "groupName": null
+    },
+    {
+      "matchPaths": ["deploy/kustomize/overlays/test/kustomization.yaml"],
+      "groupName": null
     }
   ]
 }

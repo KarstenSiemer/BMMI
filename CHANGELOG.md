@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/KarstenSiemer/BMMI/compare/v1.8.0...v1.8.1) (2024-11-24)
+
+
+### Bug Fixes
+
+* **app:** change background color ([2e3fbfb](https://github.com/KarstenSiemer/BMMI/commit/2e3fbfb1db77b23644cd567f24d54de26be440c2))
+
 # [1.8.0](https://github.com/KarstenSiemer/BMMI/compare/v1.7.9...v1.8.0) (2024-11-24)
 
 

@@ -64,7 +64,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: steps.semantic-dry.outputs.new_release_published == 'true'
         with:
-          commit_message: 'fix(core): set bmmi release image to ${{ steps.semantic-dry.outputs.new_release_version }}'
+          commit_message: 'chore(core): set bmmi release image to ${{ steps.semantic-dry.outputs.new_release_version }}'
           commit_options: '--no-verify --signoff'
           add_options: '-u'
       - name: Semantic Release

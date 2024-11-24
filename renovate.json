@@ -1,11 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices",
+    "config:recommended",
     ":semanticCommits",
     ":prImmediately",
     ":prConcurrentLimitNone",
-    ":prHourlyLimitNone"
+    ":prHourlyLimitNone",
+    ":configMigration"
   ],
   "schedule": ["at any time"],
   "ignorePaths": [],

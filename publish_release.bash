@@ -45,18 +45,19 @@ fi
 {
     echo "# Release ${VERSION}"
     echo
-    echo "| Information          | Value                 |"
-    echo "|----------------------|-----------------------|"
-    echo "| Version              | ${VERSION}            |"
-    echo "| Release Type         | ${TYPE}               |"
-    echo "| Maintenance Channel  | post via pipeline     |"
-    echo "| Issue                | create via pipeline   |"
+    echo "| Information            | Value                   |"
+    echo "| ---------------------- | ----------------------- |"
+    echo "| Version                | ${VERSION}              |"
+    echo "| Release Type           | ${TYPE}                 |"
+    echo "| Maintenance Channel    | post via pipeline       |"
+    echo "| Issue                  | create via pipeline     |"
 } > "$OUTPUT_FILE"
 
 # Append the changelog content to the output file
 {
     echo
     echo "## Changelog"
+    echo
     cat "$CHANGELOG_FILE"
 } >> "$OUTPUT_FILE"
 

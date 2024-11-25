@@ -27,6 +27,12 @@ jobs:
         with:
           extra_plugins: |
             conventional-changelog-conventionalcommits
+            @semantic-release/release-notes-generator
+            @semantic-release/commit-analyzer
+            @semantic-release/changelog
+            @semantic-release/github
+            @semantic-release/exec
+            @semantic-release/git
           dry_run: true
       - name: Set up QEMU
         if: steps.semantic-dry.outputs.new_release_published == 'true'
@@ -73,3 +79,9 @@ jobs:
         with:
           extra_plugins: |
             conventional-changelog-conventionalcommits
+            @semantic-release/release-notes-generator
+            @semantic-release/commit-analyzer
+            @semantic-release/changelog
+            @semantic-release/github
+            @semantic-release/exec
+            @semantic-release/git

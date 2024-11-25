@@ -6,7 +6,7 @@ plugins:
     - changelogTitle: Changelog
   - - '@semantic-release/changelog'
     - changelogFile: releases/${nextRelease.version}.md
-    - changelogTitle: ${nextRelease.version}
+      changelogTitle: ${nextRelease.version}
   - - '@semantic-release/git'
     - assets:
         - CHANGELOG.md

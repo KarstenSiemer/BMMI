@@ -6,7 +6,7 @@ plugins:
   - - '@semantic-release/changelog'
     - changelogTitle: \# CHANGELOG
   - - '@semantic-release/exec'
-    - publishCmd: './publish_release.bash "${nextRelease.version}" "${Date.now()"'
+    - publishCmd: './publish_release.bash "${nextRelease.version}" "${Date.now()}"'
   - - '@semantic-release/git'
     - assets:
         - CHANGELOG.md

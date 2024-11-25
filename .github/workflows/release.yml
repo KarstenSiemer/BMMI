@@ -93,4 +93,4 @@ jobs:
           atlassianUserName: ${{ secrets.ATLASSIAN_USERNAME }}
           atlassianApiToken: ${{ secrets.ATLASSIAN_API_TOKEN }}
           folderToPublish: '.'
-          contentRoot: '/releases'
+          contentRoot: '/github/workspace/releases'

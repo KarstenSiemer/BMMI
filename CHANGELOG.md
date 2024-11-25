@@ -1,5 +1,11 @@
 \# CHANGELOG
 
+## [1.8.4](https://github.com/KarstenSiemer/BMMI/compare/v1.8.3...v1.8.4) (2024-11-25)
+
+### Bug Fixes
+
+* **ci:** semantic-release config ([6986f80](https://github.com/KarstenSiemer/BMMI/commit/6986f80d2a36be68fc0393f95d08e7abc3601705))
+
 ## [1.8.3](https://github.com/KarstenSiemer/BMMI/compare/v1.8.2...v1.8.3) (2024-11-25)
 
 ### Bug Fixes

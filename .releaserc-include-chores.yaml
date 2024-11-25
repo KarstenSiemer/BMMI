@@ -1,0 +1,56 @@
+plugins:
+  - - '@semantic-release/commit-analyzer'
+    - preset: conventionalcommits
+  - - '@semantic-release/release-notes-generator'
+    - preset: conventionalcommits
+      presetConfig:
+        types:
+          - type: 'feat'
+            section: 'Features'
+          - type: 'fix'
+            section: 'Bug Fixes'
+          - type: 'perf'
+            section: 'Performance Improvements'
+          - type: 'revert'
+            section: 'Reverts'
+          - type: 'docs'
+            section: 'Documentation'
+            hidden: false
+          - type: 'style'
+            section: 'Styles'
+            hidden: false
+          - type: 'chore'
+            section: 'Miscellaneous Chores'
+            hidden: false
+          - type: 'refactor'
+            section: 'Code Refactoring'
+            hidden: false
+          - type: 'test'
+            section: 'Tests'
+            hidden: false
+          - type: 'build'
+            section: 'Build System'
+            hidden: false
+          - type: 'ci'
+            section: 'Continuous Integration'
+            hidden: false
+          - type: 'improvement'
+            section: 'Improvement'
+            hidden: false
+          - type: 'security'
+            section: 'Security'
+            hidden: false
+          - type: 'deprecation'
+            section: 'Deprecation'
+            hidden: false
+  - - '@semantic-release/changelog'
+  - - '@semantic-release/changelog'
+    - changelogFile: CHANGELOG-TEMP.md
+  - - '@semantic-release/exec'
+    - prepareCmd: './publish_release.bash "${nextRelease.version}" "${nextRelease.type}" "releases" "CHANGELOG-TEMP.md"'
+  - - '@semantic-release/git'
+    - assets:
+        - CHANGELOG.md
+        - releases/*.md
+      message: "docs(changelog): ${nextRelease.version} \n\n${nextRelease.notes}"
+  - '@semantic-release/github'

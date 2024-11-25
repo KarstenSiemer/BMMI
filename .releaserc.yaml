@@ -1,15 +1,15 @@
 plugins:
   - - '@semantic-release/commit-analyzer'
     - preset: conventionalcommits
-  - '@semantic-release/release-notes-generator'
+  - - '@semantic-release/release-notes-generator'
+    - preset: conventionalcommits
   - - '@semantic-release/changelog'
-    - changelogTitle: Changelog
-  - - '@semantic-release/changelog'
-    - changelogFile: releases/${nextRelease.version}.md
-      changelogTitle: ${nextRelease.version}
+    - changelogTitle: \# CHANGELOG
+  - - '@semantic-release/exec'
+    - publishCmd: './publish_release.bash "${nextRelease.version}" "${nextRelease.notes}" "${Date.now()"'
   - - '@semantic-release/git'
     - assets:
         - CHANGELOG.md
-        - releases/${nextRelease.version}.md
+        - releases/*.md
       message: "docs(changelog): ${nextRelease.version} \n\n${nextRelease.notes}"
   - '@semantic-release/github'

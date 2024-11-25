@@ -26,7 +26,7 @@ jobs:
         id: semantic-dry
         with:
           extra_plugins: |
-            conventional-changelog-conventionalcommits@6
+            conventional-changelog-conventionalcommits
           dry_run: true
       - name: Set up QEMU
         if: steps.semantic-dry.outputs.new_release_published == 'true'
@@ -72,4 +72,4 @@ jobs:
         id: semantic
         with:
           extra_plugins: |
-            conventional-changelog-conventionalcommits@6
+            conventional-changelog-conventionalcommits

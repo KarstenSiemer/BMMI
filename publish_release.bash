@@ -6,7 +6,7 @@ IFS=$'\n\t'
 
 # Function to display usage and exit
 usage() {
-    echo "Usage: $0 <version> <type> <channel> <changelog_file>"
+    echo "Usage: $0 <version> <type> <changelog_dir> <changelog_file>"
     exit 1
 }
 
@@ -23,7 +23,7 @@ CHANGELOG_DIR="$3"
 CHANGELOG_FILE="$4"
 
 # Validate input
-if [[ -z "$VERSION" || -z "$TYPE" || -z "$CHANNEL" || -z "$CHANGELOG_DIR" || -z "$CHANGELOG_FILE" ]]; then
+if [[ -z "$VERSION" || -z "$TYPE" || -z "$CHANGELOG_DIR" || -z "$CHANGELOG_FILE" ]]; then
     echo "Error: One or more arguments are empty."
     usage
 fi
@@ -49,7 +49,6 @@ fi
     echo "|----------------------|-----------------------|"
     echo "| Version              | ${VERSION}            |"
     echo "| Release Type         | ${TYPE}               |"
-    echo "| Release Channel      | ${CHANNEL}            |"
     echo "| Maintenance Channel  | post via pipeline     |"
     echo "| Issue                | create via pipeline   |"
 } > "$OUTPUT_FILE"

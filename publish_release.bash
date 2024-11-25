@@ -19,9 +19,8 @@ fi
 # Assign arguments to variables
 VERSION="$1"
 TYPE="$2"
-CHANNEL="$3"
-CHANGELOG_DIR="$4"
-CHANGELOG_FILE="$5"
+CHANGELOG_DIR="$3"
+CHANGELOG_FILE="$4"
 
 # Validate input
 if [[ -z "$VERSION" || -z "$TYPE" || -z "$CHANNEL" || -z "$CHANGELOG_DIR" || -z "$CHANGELOG_FILE" ]]; then

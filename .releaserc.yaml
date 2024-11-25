@@ -7,7 +7,7 @@ plugins:
   - - '@semantic-release/changelog'
     - changelogFile: CHANGELOG-TEMP.md
   - - '@semantic-release/exec'
-    - prepareCmd: './publish_release.bash "${nextRelease.version}" "${nextRelease.type}" "${nextRelease.channel}" "CHANGELOG-TEMP.md"'
+    - prepareCmd: './publish_release.bash "${nextRelease.version}" "${nextRelease.type}" "releases" "CHANGELOG-TEMP.md"'
   - - '@semantic-release/git'
     - assets:
         - CHANGELOG.md

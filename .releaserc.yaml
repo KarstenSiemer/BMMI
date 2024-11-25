@@ -4,9 +4,10 @@ plugins:
   - - '@semantic-release/release-notes-generator'
     - preset: conventionalcommits
   - - '@semantic-release/changelog'
-    - changelogTitle: \# CHANGELOG
+  - - '@semantic-release/changelog'
+    - changelogFile: CHANGELOG-TEMP.md
   - - '@semantic-release/exec'
-    - prepareCmd: './publish_release.bash "${nextRelease.version}" "${Date.now()}"'
+    - prepareCmd: './publish_release.bash "${nextRelease.version}" "${nextRelease.type}" "${nextRelease.channel}" "CHANGELOG-TEMP.md"'
   - - '@semantic-release/git'
     - assets:
         - CHANGELOG.md

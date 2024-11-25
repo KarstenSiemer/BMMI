@@ -2,9 +2,14 @@ plugins:
   - - '@semantic-release/commit-analyzer'
     - preset: conventionalcommits
   - '@semantic-release/release-notes-generator'
-  - '@semantic-release/changelog'
+  - - '@semantic-release/changelog'
+    - changelogTitle: Changelog
+  - - '@semantic-release/changelog'
+    - changelogFile: releases/${nextRelease.version}.md
+    - changelogTitle: ${nextRelease.version}
   - - '@semantic-release/git'
     - assets:
         - CHANGELOG.md
+        - releases/${nextRelease.version}.md
       message: "docs(changelog): ${nextRelease.version} \n\n${nextRelease.notes}"
   - '@semantic-release/github'

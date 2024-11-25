@@ -1,3 +1,9 @@
+## [1.8.8](https://github.com/KarstenSiemer/BMMI/compare/v1.8.7...v1.8.8) (2024-11-25)
+
+### Bug Fixes
+
+* **ci:** semantic-release and renovate ([d33fb95](https://github.com/KarstenSiemer/BMMI/commit/d33fb95d5ffe456cfc1ae7cbc281ee1dd8dd4490))
+
 ## [1.8.7](https://github.com/KarstenSiemer/BMMI/compare/v1.8.6...v1.8.7) (2024-11-25)
 
 ### Bug Fixes

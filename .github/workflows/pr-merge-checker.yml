@@ -8,9 +8,9 @@ env:
 
 on:
   pull_request:
-    types: [synchronize, opened, reopened]
+    types: [synchronize, opened]
   pull_request_target:
-    types: [labeled, synchronize]
+    types: [labeled]
 
 permissions:
   contents: write
@@ -54,8 +54,8 @@ jobs:
           github_token: ${{ secrets.github_token }}
           body: |
             The release has to be tested before a merge to production is allowed.
-            Detected version of test is: $VERSION_TEST
-            Detected version of prod is: VERSION_PROD
+            Detected version of test is: ${{ env.VERSION_TEST }}
+            Detected version of prod is: ${{ env.VERSION_PROD }}
             As test is not greater or equal to prod, merging is blocked.
             DEAL WITH IT :sunglasses:
       - uses: actions-ecosystem/action-add-labels@v1

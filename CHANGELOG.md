@@ -1,3 +1,9 @@
+## [1.8.11](https://github.com/KarstenSiemer/BMMI/compare/v1.8.10...v1.8.11) (2024-11-26)
+
+### Bug Fixes
+
+* **ci:** add renovate changes and add merge checker ([3c78846](https://github.com/KarstenSiemer/BMMI/commit/3c78846504b4e61b590a4150c111efe44d09756c))
+
 ## [1.8.10](https://github.com/KarstenSiemer/BMMI/compare/v1.8.9...v1.8.10) (2024-11-26)
 
 ### Bug Fixes

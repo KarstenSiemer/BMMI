@@ -21,12 +21,15 @@
   },
   "prCreation": "immediate",
   "rebaseWhen": "behind-base-branch",
-  "addLabels": ["update"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["*"],
+      "addLabels": ["update"]
     },
     {
       "matchFileNames": ["deploy/kustomize/overlays/prod/**"],

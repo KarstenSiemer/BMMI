@@ -8,45 +8,35 @@
     ":prHourlyLimitNone",
     ":configMigration"
   ],
-  "schedule": [
-    "at any time"
-  ],
+  "schedule": ["at any time"],
   "ignorePaths": [],
   "dependencyDashboard": true,
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
-    "fileMatch": [
-      "^deploy/kustomize/.+\\.ya?ml$"
-    ]
+    "fileMatch": ["^deploy/kustomize/.+\\.ya?ml$"]
   },
   "kustomize": {
-    "fileMatch": [
-      "(^|/)kustomization\\.ya?ml$"
-    ]
+    "fileMatch": ["(^|/)kustomization\\.ya?ml$"]
   },
   "prCreation": "immediate",
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "behind-base-branch",
+  "addLabels": ["update"],
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": false
     },
     {
-      "matchFileNames": [
-        "deploy/kustomize/overlays/prod/**"
-      ],
-      "additionalBranchPrefix": "{{parentDir}}-"
+      "matchFileNames": ["deploy/kustomize/overlays/prod/**"],
+      "additionalBranchPrefix": "{{parentDir}}-",
+      "addLabels": ["prod"]
     },
     {
-      "matchFileNames": [
-        "deploy/kustomize/overlays/test/**"
-      ],
-      "additionalBranchPrefix": "{{parentDir}}-"
+      "matchFileNames": ["deploy/kustomize/overlays/test/**"],
+      "additionalBranchPrefix": "{{parentDir}}-",
+      "addLabels": ["test"]
     }
   ]
 }

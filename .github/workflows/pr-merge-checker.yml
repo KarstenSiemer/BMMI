@@ -1,0 +1,65 @@
+name: Check
+
+env:
+  LABELS: ''
+  LABEL: 'prod'
+  VERSION_TEST: ''
+  VERSION_PROD: ''
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+  pull_request_target:
+    types: [labeled, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  prod-mergeable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snnaplab/get-labels-action@v1
+      - name: Checkout
+        if: contains(fromJSON(env.LABELS), env.LABEL)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Check if test rollout has been done already
+        if: contains(fromJSON(env.LABELS), env.LABEL)
+        run: |
+          VERSION_TEST=$(grep 'KarstenSiemer/BMMI//deploy/kustomize/base' \
+            'deploy/kustomize/overlays/test/kustomization.yaml' | \
+            awk 'BEGIN {FS="\\?ref=v"} NF > 1 {print $2}' | \
+            awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'
+          )
+          VERSION_PROD=$(grep 'KarstenSiemer/BMMI//deploy/kustomize/base' \
+            'deploy/kustomize/overlays/prod/kustomization.yaml' | \
+            awk 'BEGIN {FS="\\?ref=v"} NF > 1 {print $2}' | \
+            awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'
+          )
+          echo "VERSION_TEST=$VERSION_TEST" >> $GITHUB_ENV
+          echo "VERSION_PROD=$VERSION_PROD" >> $GITHUB_ENV
+          [[ "${VERSION_TEST}" -ge "${VERSION_PROD}" ]] && exit 0 || exit 1
+      - uses: actions-ecosystem/action-remove-labels@v1
+        if: contains(fromJSON(env.LABELS), env.LABEL)
+        with:
+          labels: |
+            blocked
+      - uses: actions-ecosystem/action-create-comment@v1
+        if: contains(fromJSON(env.LABELS), env.LABEL) && failure()
+        with:
+          github_token: ${{ secrets.github_token }}
+          body: |
+            The release has to be tested before a merge to production is allowed.
+            Detected version of test is: $VERSION_TEST
+            Detected version of prod is: VERSION_PROD
+            As test is not greater or equal to prod, merging is blocked.
+            DEAL WITH IT :sunglasses:
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: contains(fromJSON(env.LABELS), env.LABEL) && failure()
+        with:
+          labels: |
+            blocked

@@ -13,15 +13,15 @@ kustomize:
 
 dev:
   - changed-files:
-      - any-glob-to-any-file: ['deploy/kustomize/overlay/dev/**']
+      - any-glob-to-any-file: ['deploy/kustomize/overlays/dev/**']
 
 test:
   - changed-files:
-      - any-glob-to-any-file: ['deploy/kustomize/overlay/test/**']
+      - any-glob-to-any-file: ['deploy/kustomize/overlays/test/**']
 
 prod:
   - changed-files:
-      - any-glob-to-any-file: ['deploy/kustomize/overlay/prod/**']
+      - any-glob-to-any-file: ['deploy/kustomize/overlays/prod/**']
 
 ci:
   - changed-files:

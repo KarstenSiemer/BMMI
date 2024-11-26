@@ -1,3 +1,9 @@
+## [1.8.10](https://github.com/KarstenSiemer/BMMI/compare/v1.8.9...v1.8.10) (2024-11-26)
+
+### Bug Fixes
+
+* **ci:** confluence docs ([98cadde](https://github.com/KarstenSiemer/BMMI/commit/98caddec6fd751a9abbe385d09bb971fa79bc9d8))
+
 ## [1.8.9](https://github.com/KarstenSiemer/BMMI/compare/v1.8.8...v1.8.9) (2024-11-25)
 
 ### Bug Fixes

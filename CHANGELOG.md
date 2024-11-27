@@ -1,3 +1,9 @@
+## [1.8.12](https://github.com/KarstenSiemer/BMMI/compare/v1.8.11...v1.8.12) (2024-11-27)
+
+### Bug Fixes
+
+* **core:** change bg to red ([9cf6f80](https://github.com/KarstenSiemer/BMMI/commit/9cf6f800a67635cbf8850a08aa8e1cebcbc450ea))
+
 ## [1.8.11](https://github.com/KarstenSiemer/BMMI/compare/v1.8.10...v1.8.11) (2024-11-26)
 
 ### Bug Fixes

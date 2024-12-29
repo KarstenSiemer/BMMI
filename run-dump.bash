@@ -87,3 +87,5 @@ if ! $RUNNING; then
   exit 1
 fi
 dump
+# hack because mariadb likes to add trailing whitespaces
+pre-commit run trailing-whitespace --file "${DUMP}"

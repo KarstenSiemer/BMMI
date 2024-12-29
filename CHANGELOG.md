@@ -1,3 +1,9 @@
+## [1.8.13](https://github.com/KarstenSiemer/BMMI/compare/v1.8.12...v1.8.13) (2024-12-29)
+
+### Bug Fixes
+
+* **app:** revert bg color ([1a2493e](https://github.com/KarstenSiemer/BMMI/commit/1a2493e475a156ec5f6d60dc848a4d28cd09061a))
+
 ## [1.8.12](https://github.com/KarstenSiemer/BMMI/compare/v1.8.11...v1.8.12) (2024-11-27)
 
 ### Bug Fixes

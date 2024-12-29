@@ -1,3 +1,9 @@
+## [1.8.14](https://github.com/KarstenSiemer/BMMI/compare/v1.8.13...v1.8.14) (2024-12-29)
+
+### Bug Fixes
+
+* **ci:** mariadb trailing whitespaces in dump files ([50a88ae](https://github.com/KarstenSiemer/BMMI/commit/50a88ae54eb0a4eb6962162f4bdb0b112ae6be50))
+
 ## [1.8.13](https://github.com/KarstenSiemer/BMMI/compare/v1.8.12...v1.8.13) (2024-12-29)
 
 ### Bug Fixes

@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-bg-color
+  annotations:
+    kube-score/ignore: pod-networkpolicy,container-ephemeral-storage-request-and-limit,container-security-context-readonlyrootfilesystem,container-security-context-user-group-id,container-security-context-privileged,container-security-context-readonlyrootfilesystem
+spec:
+  template:
+    spec:
+      containers:
+        - name: curl
+          image: alpine/curl:8.10.0
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - '-c'
+            - 'curl "http://$WEB_TARGET:$WEB_PORT" | grep "#f9713d"'
+          env:
+            - name: WEB_TARGET
+              value: 'bmmi-web-pr-0'
+            - name: WEB_PORT
+              value: '80'
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '100m'
+            limits:
+              memory: '128Mi'
+              cpu: '100m'
+      restartPolicy: Never
+  backoffLimit: 1 # Optional: How many times to retry if the job fails

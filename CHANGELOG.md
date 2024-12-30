@@ -1,3 +1,9 @@
+## [1.8.15](https://github.com/KarstenSiemer/BMMI/compare/v1.8.14...v1.8.15) (2024-12-30)
+
+### Bug Fixes
+
+* **app:** salamirot bg ([96e9223](https://github.com/KarstenSiemer/BMMI/commit/96e9223447f7e946e55b20d9ac057e56e2f0d517))
+
 ## [1.8.14](https://github.com/KarstenSiemer/BMMI/compare/v1.8.13...v1.8.14) (2024-12-29)
 
 ### Bug Fixes

@@ -1,3 +1,9 @@
+## [1.8.17](https://github.com/KarstenSiemer/BMMI/compare/v1.8.16...v1.8.17) (2025-01-30)
+
+### Bug Fixes
+
+* **app:** red  bg ([cf2bcf2](https://github.com/KarstenSiemer/BMMI/commit/cf2bcf2f3c8bc128436565051ede91de0929c294))
+
 ## [1.8.16](https://github.com/KarstenSiemer/BMMI/compare/v1.8.15...v1.8.16) (2025-01-30)
 
 ### Bug Fixes

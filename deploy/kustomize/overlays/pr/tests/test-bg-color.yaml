@@ -14,7 +14,7 @@ spec:
           command:
             - /bin/sh
             - '-c'
-            - 'curl "http://$WEB_TARGET:$WEB_PORT" | grep "whitesmoke"'
+            - 'curl "http://$WEB_TARGET:$WEB_PORT" | grep "red"'
           env:
             - name: WEB_TARGET
               value: 'bmmi-web-pr-0'

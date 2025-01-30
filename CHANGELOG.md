@@ -1,3 +1,10 @@
+## [1.8.16](https://github.com/KarstenSiemer/BMMI/compare/v1.8.15...v1.8.16) (2025-01-30)
+
+### Bug Fixes
+
+* **app:** whitesmoke bg ([188c97b](https://github.com/KarstenSiemer/BMMI/commit/188c97b619cca35de0ed9ea34ec8ba6e02e5c729))
+* **app:** whitesmoke bg test ([42db8b3](https://github.com/KarstenSiemer/BMMI/commit/42db8b3d0a9ee9fb4d30a39755f9314ce9464c3c))
+
 ## [1.8.15](https://github.com/KarstenSiemer/BMMI/compare/v1.8.14...v1.8.15) (2024-12-30)
 
 ### Bug Fixes

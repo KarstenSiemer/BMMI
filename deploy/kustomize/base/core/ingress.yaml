@@ -12,7 +12,7 @@ spec:
         paths:
           - backend:
               service:
-                name: bmmi-web
+                name: bmmi
                 port:
                   name: http
             path: /

@@ -17,7 +17,7 @@ spec:
             - 'curl -v "http://$WEB_TARGET:$WEB_PORT"'
           env:
             - name: WEB_TARGET
-              value: 'bmmi-web-pr-0'
+              value: 'bmmi-pr-0'
             - name: WEB_PORT
               value: '80'
           resources:

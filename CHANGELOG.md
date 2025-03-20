@@ -1,3 +1,10 @@
+## [1.8.18](https://github.com/KarstenSiemer/BMMI/compare/v1.8.17...v1.8.18) (2025-03-20)
+
+### Bug Fixes
+
+* **app:** bg color change to whitesmoke ([d348bfd](https://github.com/KarstenSiemer/BMMI/commit/d348bfd9c6fa91cfe84435577d123be453048b36))
+* **app:** service name, remove -web ([8017b34](https://github.com/KarstenSiemer/BMMI/commit/8017b349ae22f50eb06acdb0526784a8b384557a))
+
 ## [1.8.17](https://github.com/KarstenSiemer/BMMI/compare/v1.8.16...v1.8.17) (2025-01-30)
 
 ### Bug Fixes

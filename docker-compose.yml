@@ -9,7 +9,7 @@ services:
       - 4080:80
     environment:
       WEB_DOCUMENT_INDEX: index.html
-      WEB_ALIAS_DOMAIN: bmmi.unifi.karstensiemer.de
+      WEB_ALIAS_DOMAIN: bmmi.local.127.0.0.1.nip.io
       DATABASE: '${DATABASE}'
       DATABASE_HOST: 'database'
       DATABASE_PORT: '3306'

@@ -54,7 +54,7 @@ jobs:
         run: |
           cd deploy/kustomize/overlays/pr
           kustomize edit set image karstensiemer/bmmi=karstensiemer/bmmi-pr:${{ github.sha }}
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         if: contains(fromJSON(env.LABELS), env.LABEL)
         with:
           commit_message: 'chore(pr): set pr overlay image to karstensiemer/bmmi-pr:${{ github.sha }}'

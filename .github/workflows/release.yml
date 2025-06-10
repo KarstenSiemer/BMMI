@@ -67,7 +67,7 @@ jobs:
           echo "Resetting overlays/pr to current release to be up to date for next PR"
           cd ../../overlays/pr
           kustomize edit set image karstensiemer/bmmi=:${{ steps.semantic-dry.outputs.new_release_version }}
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         if: steps.semantic-dry.outputs.new_release_published == 'true'
         with:
           commit_message: 'chore(core): set bmmi release image to ${{ steps.semantic-dry.outputs.new_release_version }}'

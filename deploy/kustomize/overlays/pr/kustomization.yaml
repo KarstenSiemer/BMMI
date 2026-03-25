@@ -34,4 +34,5 @@ replacements:
 
 images:
 - name: karstensiemer/bmmi
-  newTag: 1.8.18
+  newName: karstensiemer/bmmi-pr
+  newTag: fac4509a7fa314f9c35fa4443e34ccbe7eb682a2

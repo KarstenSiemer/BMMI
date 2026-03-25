@@ -22,7 +22,7 @@ jobs:
       - uses: snnaplab/get-labels-action@v1
       - name: Checkout
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.head_ref }}
       - name: Set up QEMU

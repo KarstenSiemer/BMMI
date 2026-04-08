@@ -14,10 +14,14 @@
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
-    "fileMatch": ["^deploy/kustomize/.+\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/^deploy/kustomize/.+\\.ya?ml$/"
+    ]
   },
   "kustomize": {
-    "fileMatch": ["(^|/)kustomization\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/(^|/)kustomization\\.ya?ml$/"
+    ]
   },
   "prCreation": "immediate",
   "rebaseWhen": "behind-base-branch",

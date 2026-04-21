@@ -22,7 +22,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
       - name: Semantic Release Dry Run
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@v6.0.0
         id: semantic-dry
         with:
           extra_plugins: |
@@ -74,7 +74,7 @@ jobs:
           commit_options: '--no-verify --signoff'
           add_options: '-u'
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@v6.0.0
         id: semantic
         with:
           extra_plugins: |

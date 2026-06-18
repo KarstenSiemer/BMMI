@@ -24,7 +24,7 @@ jobs:
       - uses: snnaplab/get-labels-action@v1
       - name: Checkout
         if: contains(fromJSON(env.LABELS), env.LABEL)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
       - name: Check if test rollout has been done already

@@ -9,11 +9,11 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.43",
+            "version": "2.2.14",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d01bebe3edfd4d49b9666ee5b8271ddca561042f",
-                "reference": "d01bebe3edfd4d49b9666ee5b8271ddca561042f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
+                "reference": "9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
                 "shasum": ""
             },
             "require": {
@@ -35,6 +35,17 @@
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Mirtes"
+                },
+                {
+                    "name": "Markus Staab"
+                },
+                {
+                    "name": "Vincent Langlet"
+                }
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
             "keywords": [
@@ -58,7 +69,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-24T20:40:50+00:00"
+            "time": "2026-09-12T21:39:33+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

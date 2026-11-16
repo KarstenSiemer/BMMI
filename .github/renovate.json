@@ -10,14 +10,20 @@
   ],
   "schedule": ["at any time"],
   "ignorePaths": [],
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "automergeType": "pr",
   "automergeStrategy": "rebase",
   "kubernetes": {
-    "fileMatch": ["^deploy/kustomize/.+\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/^deploy/kustomize/.+\\.ya?ml$/"
+    ]
   },
   "kustomize": {
-    "fileMatch": ["(^|/)kustomization\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/(^|/)kustomization\\.ya?ml$/"
+    ]
   },
   "prCreation": "immediate",
   "rebaseWhen": "behind-base-branch",
